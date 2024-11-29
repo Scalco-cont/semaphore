@@ -1,14 +1,22 @@
----
-- name: win_chocolatey module demo
+- name: Install an Application with chocolatey
   hosts: all
-  become: false
-  gather_facts: false
-  vars:
-    packages:
-      - git
-      - notepadplusplus
   tasks:
-    - name: install packages
-      chocolatey.chocolatey.win_chocolatey:
-        name: "{{ packages }}"
+
+    - name: Ensure Chocolatey itself is installed
+      win_chocolatey:
+        name: chocolatey
+        state: latest
+    - name: Install Wireshark
+      win_chocolatey:
+        name: wireshark
         state: present
+        version: '4.2.3'
+    - name: Install multiples packages
+      win_chocolatey:
+        name:
+        - slack
+        - zoom
+        - filezilla
+        state: present
+        state: latest
+        
