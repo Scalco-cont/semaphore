@@ -1,0 +1,14 @@
+---
+- name: Exemplo de uso do módulo win_chocolatey
+  hosts: all
+  become: false
+  gather_facts: false
+  vars:
+    packages:
+      - git
+      - notepadplusplus
+  tasks:
+    - name: Instalar pacotes usando Chocolatey
+      chocolatey.chocolatey.win_chocolatey:
+        name: "{{ packages }}"
+        state: present
