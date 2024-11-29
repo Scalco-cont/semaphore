@@ -10,7 +10,6 @@
       win_chocolatey:
         name: wireshark
         state: absent
-        version: '4.2.3'
     - name: Install multiples packages
       win_chocolatey:
         name:
