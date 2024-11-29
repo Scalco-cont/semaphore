@@ -9,7 +9,7 @@
     - name: Install Wireshark
       win_chocolatey:
         name: wireshark
-        state: present
+        state: absent
         version: '4.2.3'
     - name: Install multiples packages
       win_chocolatey:
@@ -17,6 +17,4 @@
         - slack
         - zoom
         - filezilla
-        state: present
-        state: latest
-        
+        state: absent
