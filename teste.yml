@@ -3,7 +3,7 @@
   hosts: windows
   tasks:
     - name: Coletar informações de hardware
-      ansible.windows.win_fact:
+      win_fact:
       register: hardware_info
 
     - name: Salvar informações de hardware em arquivo
