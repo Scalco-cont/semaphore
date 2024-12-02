@@ -9,11 +9,11 @@
     - name: Install Wireshark
       win_chocolatey:
         name: wireshark
-        state: absent
+        state: present
     - name: Install multiples packages
       win_chocolatey:
         name:
         - slack
         - zoom
         - filezilla
-        state: absent
+        state: present
