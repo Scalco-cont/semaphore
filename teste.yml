@@ -1,8 +1,17 @@
 ---
-- name: Copiar arquivo do servidor para o host Windows
+- name: Copiar, executar e excluir arquivo no host Windows
   hosts: windows
   tasks:
     - name: Copiar o arquivo para o host Windows
       win_copy:
         src: /teste/teste.exe
-        dest: C:\Users\Miguel-teste\Downloads\teste.exe  # Caminho de destino no Windows
+        dest: C:\Users\Miguel-teste\Downloads\teste.exe
+
+    - name: Executar o programa no host Windows
+      win_shell: |
+        C:\Users\Miguel-teste\Downloads\teste.exe
+
+    - name: Excluir o arquivo .exe após execução
+      win_file:
+        path: C:\Users\Miguel-teste\Downloads\teste.exe
+        state: absent
