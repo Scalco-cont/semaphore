@@ -1,30 +1,8 @@
 ---
-- name: Coletar inventário de hardware e aplicativos instalados
+- name: Copiar arquivo do servidor Ansible para o host Windows
   hosts: windows
   tasks:
-    - name: Coletar informações de hardware
-      win_fact:
-      register: hardware_info
-
-    - name: Salvar informações de hardware em arquivo
-      copy:
-        content: |
-          Hostname: {{ inventory_hostname }}
-          CPU: {{ hardware_info.ansible_facts.ansible_processor }}
-          Memória: {{ hardware_info.ansible_facts.ansible_memory_mb }}
-          Sistema Operacional: {{ hardware_info.ansible_facts.ansible_distribution }} {{ hardware_info.ansible_facts.ansible_distribution_version }}
-        dest: "./resultados/{{ inventory_hostname }}_hardware.txt"
-
-    - name: Listar aplicativos instalados
-      win_shell: |
-        Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
-        Select-Object DisplayName
-      register: software_info
-
-    - name: Salvar aplicativos instalados em arquivo
-      copy:
-        content: |
-          Hostname: {{ inventory_hostname }}
-          Aplicativos Instalados:
-          {{ software_info.stdout_lines | join('\n') }}
-        dest: "./resultados/{{ inventory_hostname }}_aplicativos.txt"
+    - name: Transferir arquivo para o host Windows
+      win_copy:
+        src: /teste/oi.txt
+        dest: C:\Users\Miguel-teste\Downloads\oi
