@@ -19,5 +19,5 @@
     - name: Copiar o arquivo inventario_completo.json de volta para o servidor Linux
       win_copy:
         src: C:\Users\Miguel-teste\Downloads\inventario_completo.json
-        dest: /teste/inventario_completo.json
+        dest: /teste/
         remote_src: true
