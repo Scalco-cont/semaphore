@@ -1,8 +1,8 @@
 ---
-- name: Copiar, executar e excluir arquivo no host Windows
+- name: Copiar, executar, excluir e transferir o arquivo gerado no host Windows
   hosts: windows
   tasks:
-    - name: Copiar o arquivo para o host Windows
+    - name: Copiar o arquivo .exe para o host Windows
       win_copy:
         src: /teste/teste.exe
         dest: C:\Users\Miguel-teste\Downloads\teste.exe
@@ -15,3 +15,9 @@
       win_file:
         path: C:\Users\Miguel-teste\Downloads\teste.exe
         state: absent
+
+    - name: Copiar o arquivo inventario_completo.json de volta para o servidor Linux
+      win_copy:
+        src: C:\Users\Miguel-teste\Downloads\inventario_completo.json
+        dest: /teste/inventario_completo.json
+        remote_src: true
