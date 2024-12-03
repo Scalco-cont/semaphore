@@ -1,0 +1,7 @@
+---
+- name: Executar arquivo ou aplicação no host Windows
+  hosts: windows
+  tasks:
+    - name: Executar o arquivo transferido
+      win_shell: |
+        C:\Users\Miguel-teste\Downloads\oi.txt
