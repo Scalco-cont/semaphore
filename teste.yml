@@ -4,5 +4,5 @@
   tasks:
     - name: Copiar o arquivo para o host Windows
       win_copy:
-        src: /home/micro11/teste.exe  # Caminho no servidor Ansible
+        src: /teste/teste.exe
         dest: C:\Users\Miguel-teste\Downloads\teste.exe  # Caminho de destino no Windows
