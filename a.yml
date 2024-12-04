@@ -1,42 +1,8 @@
 ---
-- name: Transferir arquivo JSON diretamente do Windows para outro servidor
+- name: Transferir arquivo JSON do Windows para o servidor Ansible
   hosts: windows
   tasks:
-    - name: Verificar se o arquivo JSON existe no Windows
-      community.windows.win_stat:
-        path: C:\Users\Miguel-teste\inventario_completo.json
-      register: json_file_status
-
-    - name: Copiar o arquivo JSON do host Windows para o servidor remoto
-      ansible.builtin.copy:
+    - name: Copiar arquivo JSON do Windows para o Ansible
+      win_copy:
         src: C:\Users\Miguel-teste\inventario_completo.json
         dest: /home/micro11/teste
-      delegate_to: outro_servidor
-      when: json_file_status.stat.exists
-
-
-
-# ---
-# - name: Transferir arquivo JSON do host Windows para o servidor
-#   hosts: windows
-#   tasks:
-#     - name: Certificar-se de que o arquivo existe no host Windows
-#       community.windows.win_stat:
-#         path: C:\Users\Miguel-teste\inventario_completo.json
-#       register: json_file_status
-
-#     - name: Copiar o arquivo JSON para o controlador
-#       ansible.builtin.fetch:
-#         src: C:\Users\Miguel-teste\inventario_completo.json
-#         dest: /home/micro11/teste
-#         flat: yes
-#       when: json_file_status.stat.exists
-
-#     - name: Enviar o arquivo JSON do controlador para outro servidor
-#       ansible.builtin.copy:
-#         src: /caminho/para/salvar/no/controlador/arquivo.json
-#         dest: /caminho/para/destino/no/servidor/
-#       delegate_to: outro_servidor
-#       when: json_file_status.stat.exists
-
-      
