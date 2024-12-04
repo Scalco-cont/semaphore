@@ -2,6 +2,12 @@
 - name: Transferir arquivo JSON do Windows para o servidor Ansible
   hosts: windows
   tasks:
+    - name: Garantir que o diretório de destino existe no servidor Ansible
+      ansible.builtin.file:
+        path: /home/micro11/teste
+        state: directory
+        mode: '0755'
+
     - name: Copiar arquivo JSON do Windows para o servidor Ansible
       win_copy:
         src: C:\Users\Miguel-teste\inventario_completo.json
