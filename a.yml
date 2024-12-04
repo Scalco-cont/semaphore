@@ -1,15 +1,12 @@
 ---
 - name: Transferir arquivo JSON do Windows para o servidor Ansible
-  hosts: windows
+  hosts: all
+  become: false
+  vars:
+    myfile: 'C:\Users\Miguel-teste\inventario_completo.json'
+    dump_dir: "logs"
   tasks:
-    - name: Garantir que o diretório de destino existe no servidor Ansible
-      ansible.builtin.file:
-        path: /home/micro11/teste
-        state: directory
-        mode: '0755'
-
-    - name: Copiar arquivo JSON do Windows para o servidor Ansible
-      win_copy:
-        src: C:\Users\Miguel-teste\inventario_completo.json
-        dest: /home/micro11/teste/inventario_completo.json
-        remote_src: yes
+    - name: fetch file
+      ansible.builtin.fetch:
+        src: "{{ myfile }}"
+        dest: "{{ dump_dir }}"
