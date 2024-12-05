@@ -3,7 +3,7 @@
   become: false
   vars:
     myfile: 'C:\Users\Miguel-teste\inventario_completo.json'
-    dest_path: "/home/micro11/teste/inventario_completo.json"
+    dest_path: "/teste/inventario_completo.json"
   tasks:
     - name: Transferir arquivo JSON
       ansible.builtin.fetch:
