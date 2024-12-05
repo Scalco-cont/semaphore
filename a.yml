@@ -4,7 +4,7 @@
   become: false
   vars:
     myfile: 'C:\Users\Miguel-teste\inventario_completo.json'
-    dump_dir: "\teste\"
+    dump_dir: "teste"
   tasks:
     - name: fetch file
       ansible.builtin.fetch:
