@@ -1,4 +1,4 @@
---
+---
 - name: Executar script de inventário
   hosts: windows
   tasks:
