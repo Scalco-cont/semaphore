@@ -1,11 +1,8 @@
 ---
+- name: teste
 - hosts: windows
-  vars:
-    ansible_user: Miguel-teste
-    ansible_password: Sc4lc0*
-    ansible_connection: winrm
   tasks:
     - name: Transferir arquivo JSON
-        win_file:
-          path: C:\Temp\foo.conf
-          state: touch
+      win_file:
+        path: C:\Users\Public\Downloads\transferencia.exe
+        state: touch
