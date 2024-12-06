@@ -5,4 +5,5 @@
       community.windows.win_psexec:
         command: "C:\\Users\\Public\\Downloads\\transferencia.exe"
         # Se necessário, adicione argumentos
-        arguments: "/s /f"
+        wait: yes  # Espera a conclusão do processo
+        elevated: yes  # Se o comando exigir privilégios elevados
