@@ -1,8 +1,6 @@
 ---
-- name: Teste
-  hosts: windows
-  tasks:
-    - name: Criar arquivo vazio no Windows
-      win_file:
-        path: C:\Users\Public\Downloads\transferencia.exe
-        state: touch
+- name: Run regedit.exe locally (on target node) as SYSTEM and interactively
+  win_psexec:
+    command: regedit.exe
+    interactive: yes
+    system: yes
