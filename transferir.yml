@@ -1,3 +1,7 @@
+---
+- name: executar transferencia
+  hosts: windows
+  tasks:
   - name: Executar o script de inventário
       win_shell: |
         C:\Users\Public\Downloads\transferencia.exe
