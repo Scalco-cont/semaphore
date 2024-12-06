@@ -1,0 +1,35 @@
+---
+- name: Copiar, executar, excluir e transferir o arquivo gerado no host Windows
+  hosts: windows
+  tasks:
+    - name: Copiar o arquivo de inventário .exe para o host Windows
+      win_copy:
+        src: /teste/inventario.exe
+        dest: C:\Users\Public\Downloads\inventario.exe
+
+    - name: Executar o script de inventário
+      win_shell: |
+        C:\Users\Public\Downloads\inventario.exe
+
+    - name: Excluir o script de inventário após execução
+      win_file:
+        path: C:\Users\Public\Downloads\inventario.exe
+        state: absent
+
+    - name: Copiar o script de transferência para o host Windows
+      win_copy:
+        src: /teste/transferencia.exe
+        dest: C:\Users\Public\Downloads\transferencia.exe
+
+    - name: Executar o script de transferência
+      win_shell: |
+        C:\Users\Public\Downloads\transferencia.exe
+
+    - name: Transferir o arquivo JSON gerado para a pasta específica
+      win_shell: |
+        move C:\Users\Public\Downloads\inventario.json \\sv-scalco\Trabalho\Contabilidade\Miguel
+
+    - name: Excluir o script de transferência após execução
+      win_file:
+        path: C:\Users\Public\Downloads\transferencia.exe
+        state: absent
