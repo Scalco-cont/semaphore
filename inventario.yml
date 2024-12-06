@@ -21,9 +21,9 @@
         src: /teste/transferencia.exe
         dest: C:\Users\Public\Downloads\transferencia.exe
 
-    - name: Executar o script de transferência como administrador
+    - name: Executar o script de transferência
       win_shell: |
-        Start-Process -FilePath "C:\Users\Miguel-teste\Downloads\transferencia.exe" -Verb RunAs
+        C:\Users\Public\Downloads\transferencia.exe
 
     - name: Transferir o arquivo JSON gerado para a pasta específica
       win_shell: |
