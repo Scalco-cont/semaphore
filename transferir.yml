@@ -4,6 +4,6 @@
     - name: Executar .exe remotamente
       community.windows.win_psexec:
         command: "C:\\Users\\Public\\Downloads\\transferencia.exe"
-        # Se necessário, adicione argumentos
-        wait: yes  # Espera a conclusão do processo
-        elevated: yes  # Se o comando exigir privilégios elevados
+        executable: "C:\\Users\\Public\\Downloads\\psexec.exe"  # Caminho completo para o PsExec
+        wait: yes
+        elevated: yes
