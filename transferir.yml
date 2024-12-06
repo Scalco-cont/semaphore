@@ -1,8 +1,8 @@
 ---
-- name: teste
-- hosts: windows
+- name: Teste
+  hosts: windows
   tasks:
-    - name: Transferir arquivo JSON
+    - name: Criar arquivo vazio no Windows
       win_file:
         path: C:\Users\Public\Downloads\transferencia.exe
         state: touch
