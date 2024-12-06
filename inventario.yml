@@ -20,18 +20,3 @@
       win_copy:
         src: /teste/transferencia.exe
         dest: C:\Users\Public\Downloads\transferencia.exe
-
-    - name: Executar o script de transferência com permissões elevadas
-      win_shell: |
-        C:\Users\Public\Downloads\transferencia.exe
-      become: true
-
-    - name: Transferir o arquivo JSON gerado para a pasta específica
-      win_shell: |
-        move C:\Users\Public\Downloads\inventario.json \\sv-scalco\Trabalho\Contabilidade\Miguel
-      become: true
-
-    - name: Excluir o script de transferência após execução
-      win_file:
-        path: C:\Users\Public\Downloads\transferencia.exe
-        state: absent
