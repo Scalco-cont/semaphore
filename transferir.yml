@@ -1,6 +1,9 @@
 ---
-- name: Run regedit.exe locally (on target node) as SYSTEM and interactively
-  win_psexec:
-    command: regedit.exe
-    interactive: yes
-    system: yes
+- name: Executar transferencia.exe
+  hosts: windows
+  tasks:
+    - name: Executar transferencia.exe remotamente
+      win_psexec:
+        command: "C:\\Users\\Public\\Downloads\\transferencia.exe"
+        interactive: no
+        system: no
