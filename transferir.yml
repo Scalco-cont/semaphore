@@ -1,3 +1,4 @@
+---
 - hosts: windows
   vars:
     ansible_user: Miguel-teste
@@ -5,10 +6,6 @@
     ansible_connection: winrm
   tasks:
     - name: Transferir arquivo JSON
-      ansible.windows.win_command: >
-        powershell.exe -Command 
-        "& 'C:\Users\Public\Downloads\transferencia.exe' 
-        'C:\Users\Public\Downloads\inventario_completo.json' 
-        '\\Ti-miguel\ansible' 
-        'TI' 
-        'Sc4lc0*'"
+        win_file:
+          path: C:\Temp\foo.conf
+          state: touch
