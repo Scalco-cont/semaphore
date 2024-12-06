@@ -1,4 +1,4 @@
-- hosts: windows_servers
+- hosts: windows
   vars:
     ansible_user: Miguel-teste
     ansible_password: Sc4lc0*
