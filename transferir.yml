@@ -9,4 +9,4 @@
         "C:\Users\Public\Downloads\transferencia.exe" "C:\Users\Public\Downloads\inventario_completo.json" "\\Ti-miguel\ansible" "TI" "Sc4lc0*"
       become: yes
       become_method: runas
-      become_user: TI
+      become_user: Miguel-teste
