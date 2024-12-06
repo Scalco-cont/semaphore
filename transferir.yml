@@ -1,10 +1,20 @@
-- name: Executar arquivo .exe em Windows
+--
+- name: Copiar, executar, excluir e transferir o arquivo gerado no host Windows
   hosts: windows
   tasks:
-    - name: Executar .exe remotamente
-      community.windows.win_psexec:
-        command: "C:\\Users\\Public\\Downloads\\teste.exe"
-        executable: "C:\\Users\\Public\\Downloads\\psexec.exe"
-        wait: yes
-        elevated: yes
-        interactive: true
+    - name: Executar o script de inventário
+      win_shell: |
+        C:\Users\Public\Downloads\teste.exe
+
+
+
+# - name: Executar arquivo .exe em Windows
+#   hosts: windows
+#   tasks:
+#     - name: Executar .exe remotamente
+#       community.windows.win_psexec:
+#         command: "C:\\Users\\Public\\Downloads\\teste.exe"
+#         executable: "C:\\Users\\Public\\Downloads\\psexec.exe"
+#         wait: yes
+#         elevated: yes
+#         interactive: true
