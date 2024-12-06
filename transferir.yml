@@ -1,8 +1,6 @@
 ---
 - name: executar transferencia
   hosts: windows
-  become: true
-  become_user: SYSTEM
   tasks:
     - name: Executar o script de inventário
       win_shell: |
