@@ -3,6 +3,8 @@
     ansible_user: Miguel-teste
     ansible_password: Sc4lc0*
     ansible_connection: winrm
+    ansible_become_user: TI  # Usuário com privilégios elevados
+    ansible_become_method: runas
   tasks:
     - name: Transferir arquivo JSON
       ansible.windows.win_shell: |
