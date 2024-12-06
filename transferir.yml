@@ -3,7 +3,9 @@
   tasks:
     - name: Executar .exe remotamente
       community.windows.win_psexec:
-        command: "C:\\Users\\Public\\Downloads\\transferencia.exe"
-        executable: "C:\\Users\\Public\\Downloads\\psexec.exe"  # Caminho completo para o PsExec
-        wait: yes
+        command: "C:\\Usuários\\Público\\Downloads\\transferencia.exe"
+        executable: "C:\\Usuários\\Público\\Downloads\\psexec.exe"
+        wait: no  # Não esperar a execução completar
         elevated: yes
+        system: yes  # Rodar como SYSTEM se necessário
+        args: "-d -i"  # Executar de forma interativa e em segundo plano
