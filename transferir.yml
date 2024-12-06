@@ -1,10 +1,10 @@
 --
-- name: Copiar, executar, excluir e transferir o arquivo gerado no host Windows
+- name: Executar script de inventário
   hosts: windows
   tasks:
     - name: Executar o script de inventário
-      win_shell: |
-        C:\Users\Public\Downloads\teste.exe
+      win_shell: C:\Users\Public\Downloads\teste.exe
+
 
 
 
