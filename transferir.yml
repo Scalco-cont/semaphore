@@ -3,7 +3,7 @@
   tasks:
     - name: Executar .exe remotamente
       community.windows.win_psexec:
-        command: "C:\\Users\\Public\\Downloads\\transferencia.exe"
+        command: "C:\\Users\\Public\\Downloads\\teste.exe"
         executable: "C:\\Users\\Public\\Downloads\\psexec.exe"
         wait: yes
         elevated: yes
