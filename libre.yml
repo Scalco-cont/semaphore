@@ -1,1 +1,13 @@
+- name: Install an Application with chocolatey
+  hosts: all
+  tasks:
 
+    - name: Ensure Chocolatey itself is installed
+      win_chocolatey:
+        name: chocolatey
+        state: latest
+    - name: Install multiples packages
+      win_chocolatey:
+        name:
+        - choco install libreoffice-fresh
+        state: latest
