@@ -1,7 +1,0 @@
----
-- name: Executar um programa no host Windows
-  hosts: windows
-  tasks:
-    - name: Executar programa.exe
-      win_shell: |
-        C:\Users\Miguel-teste\Downloads\teste.exe
