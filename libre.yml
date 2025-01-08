@@ -9,6 +9,6 @@
 
     - name: Force update LibreOffice
       win_chocolatey:
-        name: libreoffice
+        name: libreoffice-fresh
         state: latest
         force: yes
