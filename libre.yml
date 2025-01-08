@@ -9,5 +9,5 @@
     - name: Install multiples packages
       win_chocolatey:
         name:
-        - choco install libreoffice-fresh
+        - libreoffice-fresh
         state: latest
