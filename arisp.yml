@@ -4,7 +4,9 @@
   tasks:
     - name: Procurar caminho da pasta Downloads
       win_shell: |
-        [Environment]::GetFolderPath('Downloads')
+        $shell = New-Object -ComObject Shell.Application
+        $downloads = $shell.Namespace('shell:::{374DE290-123F-4565-9164-39C4925E467B}').Self.Path
+        $downloads
       register: downloads_folder
 
     - name: Procurar AssinadorARISP.exe na pasta Downloads
