@@ -44,7 +44,7 @@
       when: found_files.files is defined
 
 - name: Combinar relatórios e enviar para o servidor
-  hosts: localhost
+  hosts: windows
   gather_facts: no
   tasks:
     - name: Criar diretório para armazenar relatórios se não existir
