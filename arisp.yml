@@ -36,20 +36,14 @@
         create: yes  # Isso cria o arquivo se não existir
       when: found_files.files | length == 0
 
-    - name: Verificar se o relatório foi criado
-      win_stat:
-        path: "C:\\Temp\\relatorio_assinadorarisp.txt"
-      register: file_check
-
     - name: Copiar o relatório do Windows para o nó de controle
       win_copy:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"
         dest: "/tmp/relatorio_assinadorarisp.txt"  # Caminho temporário no nó de controle
-        remote_src: yes  # Indica que o arquivo está no nó remoto Windows
-      when: file_check.stat.exists
+      when: found_files.files is defined
 
     - name: Copiar o relatório para o servidor Linux
       copy:
         src: "/tmp/relatorio_assinadorarisp.txt"
         dest: "/home/micro11/relatorio_{{ inventory_hostname }}.txt"  # Caminho correto para Linux
-      when: file_check.stat.exists
+      when: found_files.files is defined
