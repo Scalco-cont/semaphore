@@ -39,5 +39,5 @@
     - name: Fetch do relatório para o servidor
       ansible.builtin.fetch:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"  # Caminho no Windows
-        dest: "/home/micro11/relatorio_{{ inventory_hostname }}.txt"  # Caminho no servidor Linux
+        dest: "/tmp/relatorio_{{ inventory_hostname }}.txt"  # Caminho no servidor Linux
         flat: yes
