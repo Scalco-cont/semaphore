@@ -1,37 +1,15 @@
----
-- name: Pesquisar AssinadorARISP.exe na pasta Downloads e gerar relatório
-  hosts: all
-  gather_facts: no
-  tasks:
-    - name: Criar diretório C:\Temp se não existir
-      win_file:
-        path: "C:\\Temp"
-        state: directory
+- name: Procurar pasta Downloads usando PowerShell
+  win_shell: |
+    [Environment]::GetFolderPath('MyDocuments') + "\Downloads"
+  register: downloads_folder
 
-    - name: Procurar AssinadorARISP.exe na pasta Downloads
-      win_find:
-        paths: "\\Downloads"  # Caminho correto para Downloads
-        patterns: "AssinadorARISP.exe"
-        recurse: yes
-      register: found_files
+- name: Procurar AssinadorARISP.exe na pasta Downloads
+  win_find:
+    paths: "{{ downloads_folder.stdout }}"  # Usando o caminho obtido do PowerShell
+    patterns: "AssinadorARISP.exe"
+    recurse: yes
+  register: found_files
 
-    - name: Gerar ou adicionar relatório de quem tem o AssinadorARISP.exe
-      win_lineinfile:
-        path: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        line: "{{ inventory_hostname }} tem o AssinadorARISP.exe"
-        create: yes  # Isso cria o arquivo se não existir
-      when: found_files.files | length > 0
-
-    - name: Gerar ou adicionar relatório de quem não tem o AssinadorARISP.exe
-      win_lineinfile:
-        path: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        line: "{{ inventory_hostname }} NÃO tem o AssinadorARISP.exe"
-        create: yes  # Isso cria o arquivo se não existir
-      when: found_files.files | length == 0
-
-    - name: Copiar o relatório para o servidor
-      copy:
-        src: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        dest: "/caminho/do/servidor/relatorio_{{ inventory_hostname }}.txt"
-        remote_src: yes
-      when: found_files.files is defined
+- name: Exibir arquivos encontrados
+  debug:
+    msg: "Arquivos encontrados: {{ found_files.files }}"
