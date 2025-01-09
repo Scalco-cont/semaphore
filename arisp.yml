@@ -15,16 +15,18 @@
         recurse: yes
       register: found_files
 
-    - name: Gerar relatório de quem tem o AssinadorARISP.exe
+    - name: Gerar ou adicionar relatório de quem tem o AssinadorARISP.exe
       win_lineinfile:
         path: "C:\\Temp\\relatorio_assinadorarisp.txt"
         line: "{{ inventory_hostname }} tem o AssinadorARISP.exe"
+        create: yes  # Isso cria o arquivo se não existir
       when: found_files.files | length > 0
 
-    - name: Gerar relatório de quem não tem o AssinadorARISP.exe
+    - name: Gerar ou adicionar relatório de quem não tem o AssinadorARISP.exe
       win_lineinfile:
         path: "C:\\Temp\\relatorio_assinadorarisp.txt"
         line: "{{ inventory_hostname }} NÃO tem o AssinadorARISP.exe"
+        create: yes  # Isso cria o arquivo se não existir
       when: found_files.files | length == 0
 
     - name: Copiar o relatório para o servidor
