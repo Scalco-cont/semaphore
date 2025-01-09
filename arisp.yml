@@ -1,0 +1,30 @@
+---
+- name: Pesquisar AssinadorARISP.exe e gerar relatório
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Procurar AssinadorARISP.exe em todo o sistema
+      win_find:
+        paths: "C:\\"
+        patterns: "AssinadorARISP.exe"
+        recurse: yes
+      register: found_files
+
+    - name: Gerar relatório de quem tem o AssinadorARISP.exe
+      win_lineinfile:
+        path: "C:\\relatorio_assinadorarisp.txt"
+        line: "{{ inventory_hostname }} tem o AssinadorARISP.exe"
+      when: found_files.files | length > 0
+
+    - name: Gerar relatório de quem não tem o AssinadorARISP.exe
+      win_lineinfile:
+        path: "C:\\relatorio_assinadorarisp.txt"
+        line: "{{ inventory_hostname }} NÃO tem o AssinadorARISP.exe"
+      when: found_files.files | length == 0
+
+    - name: Copiar o relatório para o servidor (ou local especificado)
+      copy:
+        src: "C:\\relatorio_assinadorarisp.txt"
+        dest: "/home/relatorio_{{ inventory_hostname }}.txt"
+        remote_src: yes
+      when: found_files.files is defined
