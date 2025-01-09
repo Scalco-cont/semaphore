@@ -1,1 +1,8 @@
+- name: Force Update LibreOffice with Chocolatey
+  hosts: all
+  tasks:
 
+    - name: Ensure Chocolatey itself is installed
+      win_chocolatey:
+        name: chocolatey
+        state: absent
