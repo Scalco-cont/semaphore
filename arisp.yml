@@ -39,6 +39,6 @@
     - name: Copiar o relatório para o servidor
       copy:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        dest: "/home/micro11/relatorio_{{ inventory_hostname }}.txt"
+        dest: "/home/micro11/relatorio_{{ inventory_hostname }}.txt"  # Caminho correto para Linux
         remote_src: yes
       when: found_files.files is defined
