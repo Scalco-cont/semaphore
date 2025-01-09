@@ -36,9 +36,14 @@
         create: yes  # Isso cria o arquivo se não existir
       when: found_files.files | length == 0
 
-    - name: Copiar o relatório para o servidor
-      copy:
+    - name: Copiar o relatório do Windows para o nó de controle
+      win_copy:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"
+        dest: "/tmp/relatorio_assinadorarisp.txt"  # Caminho temporário no nó de controle
+      when: found_files.files is defined
+
+    - name: Copiar o relatório para o servidor Linux
+      copy:
+        src: "/tmp/relatorio_assinadorarisp.txt"
         dest: "/home/micro11/relatorio_{{ inventory_hostname }}.txt"  # Caminho correto para Linux
-        remote_src: yes
       when: found_files.files is defined
