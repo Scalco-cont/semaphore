@@ -1,15 +1,19 @@
-- name: Procurar pasta Downloads usando PowerShell
-  win_shell: |
-    [Environment]::GetFolderPath('MyDocuments') + "\Downloads"
-  register: downloads_folder
-
+---
 - name: Procurar AssinadorARISP.exe na pasta Downloads
-  win_find:
-    paths: "{{ downloads_folder.stdout }}"  # Usando o caminho obtido do PowerShell
-    patterns: "AssinadorARISP.exe"
-    recurse: yes
-  register: found_files
+  hosts: windows  # Ou o grupo de hosts adequado
+  tasks:
+    - name: Procurar caminho da pasta Downloads
+      win_shell: |
+        [Environment]::GetFolderPath('MyDocuments') + "\Downloads"
+      register: downloads_folder
 
-- name: Exibir arquivos encontrados
-  debug:
-    msg: "Arquivos encontrados: {{ found_files.files }}"
+    - name: Procurar AssinadorARISP.exe na pasta Downloads
+      win_find:
+        paths: "{{ downloads_folder.stdout }}"  # Usando o caminho obtido do PowerShell
+        patterns: "AssinadorARISP.exe"
+        recurse: yes
+      register: found_files
+
+    - name: Exibir arquivos encontrados
+      debug:
+        msg: "Arquivos encontrados: {{ found_files.files }}"
