@@ -52,8 +52,13 @@
         path: "/tmp/relatorios_combinados"
         state: directory
 
-    - name: Concatenar todos os relatórios em um único arquivo
-      command: "cat /tmp/relatorios/*_relatorio_assinadorarisp.txt > /tmp/relatorios_combinados/relatorio_completo.txt"
+    - name: Combinar todos os relatórios em um único arquivo
+      assemble:
+        src: "/tmp/relatorios/"
+        dest: "/tmp/relatorios_combinados/relatorio_completo.txt"
+        # Garantir que somente os arquivos de relatório sejam juntados
+        exclude: "*_relatorio_assinadorarisp.txt"
+        # Pode usar o comando 'find' para excluir arquivos indesejados, caso necessário.
 
     - name: Enviar arquivo combinado para o servidor
       copy:
