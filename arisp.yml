@@ -10,7 +10,7 @@
 
     - name: Procurar AssinadorARISP.exe na pasta Downloads
       win_find:
-        paths: "{{ lookup('env', 'USERPROFILE') }}\\Downloads"
+        paths: "{{ lookup('env', 'USERPROFILE') }}\\Downloads"  # Usa o diretório Downloads correto
         patterns: "AssinadorARISP.exe"
         recurse: yes
       register: found_files
