@@ -36,8 +36,26 @@
         create: yes
       when: found_files.files | length == 0
 
-    - name: Fetch do relatório para o servidor
+    - name: Fetch do relatório para o controlador Ansible
       ansible.builtin.fetch:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"  # Caminho no Windows
-        dest: "/tmp/relatorio_{{ inventory_hostname }}.txt"  # Caminho no servidor Linux
+        dest: "/tmp/relatorios/{{ inventory_hostname }}_relatorio_assinadorarisp.txt"  # Caminho no servidor Linux
         flat: yes
+      when: found_files.files is defined
+
+- name: Combinar relatórios e enviar para o servidor
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Criar diretório para armazenar relatórios se não existir
+      file:
+        path: "/tmp/relatorios_combinados"
+        state: directory
+
+    - name: Concatenar todos os relatórios em um único arquivo
+      command: "cat /tmp/relatorios/*_relatorio_assinadorarisp.txt > /tmp/relatorios_combinados/relatorio_completo.txt"
+
+    - name: Enviar arquivo combinado para o servidor
+      copy:
+        src: "/tmp/relatorios_combinados/relatorio_completo.txt"
+        dest: "/home/micro11/relatorio_completo.txt"
