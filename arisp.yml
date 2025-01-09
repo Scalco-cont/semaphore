@@ -1,10 +1,10 @@
 ---
 - name: Procurar AssinadorARISP.exe na pasta Downloads
-  hosts: windows  # Ou o grupo de hosts adequado
+  hosts: windows  # Ou o nome do seu grupo de hosts adequado
   tasks:
     - name: Procurar caminho da pasta Downloads
       win_shell: |
-        [Environment]::GetFolderPath('MyDocuments') + "\Downloads"
+        [Environment]::GetFolderPath('Downloads')
       register: downloads_folder
 
     - name: Procurar AssinadorARISP.exe na pasta Downloads
