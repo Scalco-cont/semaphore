@@ -10,7 +10,7 @@
 
     - name: Procurar AssinadorARISP.exe na pasta Downloads
       win_find:
-        paths: "{{ lookup('env', 'USERPROFILE') }}\\Downloads"  # Usa o diretório Downloads correto
+        paths: "{{ lookup('env', 'USERPROFILE') }}\\Downloads"  # Caminho correto para Downloads
         patterns: "AssinadorARISP.exe"
         recurse: yes
       register: found_files
@@ -32,6 +32,6 @@
     - name: Copiar o relatório para o servidor
       copy:
         src: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        dest: "/home/relatorio_{{ inventory_hostname }}.txt"
+        dest: "/caminho/do/servidor/relatorio_{{ inventory_hostname }}.txt"
         remote_src: yes
       when: found_files.files is defined
