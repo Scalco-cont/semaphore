@@ -1,69 +1,14 @@
 ---
-- name: Pesquisar AssinadorARISP.exe na pasta Downloads e gerar relatório
-  hosts: all
-  gather_facts: no
-  tasks:
-    - name: Criar diretório C:\Temp se não existir
-      win_file:
-        path: "C:\\Temp"
-        state: directory
-
-    - name: Procurar caminho da pasta Downloads
-      win_shell: |
-        $shell = New-Object -ComObject Shell.Application
-        $downloads = $shell.Namespace('shell:::{374DE290-123F-4565-9164-39C4925E467B}').Self.Path
-        $downloads
-      register: downloads_folder
-
-    - name: Procurar AssinadorARISP.exe na pasta Downloads
-      win_find:
-        paths: "{{ downloads_folder.stdout }}"  # Usando o caminho obtido do PowerShell
-        patterns: "AssinadorARISP.exe"
-        recurse: yes
-      register: found_files
-
-    - name: Gerar relatório se o AssinadorARISP.exe for encontrado
-      win_lineinfile:
-        path: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        line: "{{ inventory_hostname }} tem o AssinadorARISP.exe"
-        create: yes
-      when: found_files.files | length > 0
-
-    - name: Gerar relatório se o AssinadorARISP.exe não for encontrado
-      win_lineinfile:
-        path: "C:\\Temp\\relatorio_assinadorarisp.txt"
-        line: "{{ inventory_hostname }} NÃO tem o AssinadorARISP.exe"
-        create: yes
-      when: found_files.files | length == 0
-
-    - name: Fetch do relatório para o controlador Ansible
-      ansible.builtin.fetch:
-        src: "C:\\Temp\\relatorio_assinadorarisp.txt"  # Caminho no Windows
-        dest: "/tmp/relatorios/{{ inventory_hostname }}_relatorio_assinadorarisp.txt"  # Caminho no servidor Linux
-        flat: yes
-      when: found_files.files is defined
-
-- name: Combinar relatórios e enviar para o servidor
+- name: Instalar a nova versão do LibreOffice no Windows
   hosts: windows
-  gather_facts: no
   tasks:
-    - name: Criar diretório para armazenar relatórios se não existir
-      file:
-        path: "/tmp/relatorios_combinados"
-        state: directory
+    - name: Baixar o instalador do LibreOffice
+      win_get_url:
+        url: https://download.documentfoundation.org/libreoffice/stable/24.8.4/win/x86_64/LibreOffice_24.8.4_Win_x86-64.msi
+        dest: C:\Temp\LibreOffice_24.8.4_Win_x86-64.msi
 
-    - name: Obter lista de arquivos de relatórios
-      find:
-        paths: "/tmp/relatorios/"
-        patterns: "*_relatorio_assinadorarisp.txt"
-      register: report_files
-
-    - name: Combinar todos os relatórios em um único arquivo
-      assemble:
-        src: "{{ report_files.files | map(attribute='path') | list }}"
-        dest: "/tmp/relatorios_combinados/relatorio_completo.txt"
-
-    - name: Enviar arquivo combinado para o servidor
-      copy:
-        src: "/tmp/relatorios_combinados/relatorio_completo.txt"
-        dest: "/home/micro11/relatorio_completo.txt"
+    - name: Instalar o LibreOffice
+      win_package:
+        path: C:\Temp\LibreOffice_24.8.4_Win_x86-64.msi
+        arguments: /quiet
+        state: present
