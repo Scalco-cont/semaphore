@@ -1,8 +1,6 @@
 ---
-- name: Executar script Python no Windows
+- name: Testar execução de comando no Windows
   hosts: windows
-  become: yes
-  become_user: TI  # Se necessário para o acesso
   tasks:
-    - name: Executar script Python
-      win_command: python C:\Windows\Temp\script.py
+    - name: Testar comando simples
+      win_shell: echo "Olá do Windows"
