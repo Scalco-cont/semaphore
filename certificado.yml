@@ -2,6 +2,7 @@
 - name: Remover certificados expirados em máquinas Windows
   hosts: windows
   gather_facts: no
+  become: yes
   tasks:
     - name: Remover certificados expirados do usuário atual
       ansible.builtin.win_shell: |
