@@ -1,32 +1,22 @@
 ---
-- name: Remover todos os certificados dos hosts Windows
+- name: Remover todos os certificados do armazenamento pessoal (CurrentUser\My)
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Obter lista de thumbprints dos certificados do armazenamento LocalMachine\My
-      win_shell: |
-        $certs = Get-ChildItem -Path Cert:\LocalMachine\My
-        $certs | Select-Object -ExpandProperty Thumbprint
-      register: cert_thumbprints_local_machine_my
-
     - name: Obter lista de thumbprints dos certificados do armazenamento CurrentUser\My
       win_shell: |
         $certs = Get-ChildItem -Path Cert:\CurrentUser\My
         $certs | Select-Object -ExpandProperty Thumbprint
       register: cert_thumbprints_current_user_my
 
-    - name: Combinar thumbprints encontrados
-      set_fact:
-        cert_thumbprints: "{{ cert_thumbprints_local_machine_my.stdout_lines + cert_thumbprints_current_user_my.stdout_lines }}"
-
     - name: Verificar thumbprints coletados
       debug:
-        var: cert_thumbprints
+        var: cert_thumbprints_current_user_my.stdout_lines
 
-    - name: Remover todos os certificados
+    - name: Remover todos os certificados do armazenamento CurrentUser\My
       win_certificate_store:
         store_name: "My"
         thumbprint: "{{ item }}"
         state: "absent"
-      loop: "{{ cert_thumbprints }}"
-      when: cert_thumbprints | length > 0
+      loop: "{{ cert_thumbprints_current_user_my.stdout_lines }}"
+      when: cert_thumbprints_current_user_my.stdout_lines | length > 0
