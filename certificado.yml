@@ -1,11 +1,16 @@
 ---
-- name: Remover certificados expirados com permissão elevada
+- name: Copiar e executar o arquivo .exe
   hosts: windows
-  become: yes
-  become_user: TI
   tasks:
-    - name: Remover certificados expirados do CurrentUser
-      win_shell: |
-        $ErrorActionPreference = "Stop"
-        $expired = Get-ChildItem cert:\CurrentUser\My | Where-Object { $_.NotAfter -lt (Get-Date) }
-        $expired | ForEach-Object { Remove-Item $_.PSPath -Force }
+    - name: Copiar o arquivo .exe para o diretório /tmp do host
+      ansible.builtin.copy:
+        src: /home/micro11/aaaaaaa.exe
+        dest: C:\Windows\Temp\aaaaaaa.exe
+
+    - name: Executar o arquivo .exe
+      win_command: C:\Windows\Temp\aaaaaaa.exe
+
+    - name: Excluir o arquivo .exe após execução
+      win_file:
+        path: C:\Windows\Temp\aaaaaaa.exe
+        state: absent
