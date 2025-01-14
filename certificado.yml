@@ -1,12 +1,12 @@
 ---
 - name: List certificates in the store
-  win_certificate_store:
+  ansible.windows.win_certificate_store:
     path: Cert:\CurrentUser\My
     state: list
   register: certs
 
 - name: Remove all certificates
-  win_certificate_store:
+  ansible.windows.win_certificate_store:
     path: "{{ item.PSPath }}"
     state: absent
   loop: "{{ certs.certificates }}"
