@@ -3,40 +3,12 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Obter todos os certificados do armazenamento CurrentUser\My
+    - name: Remover certificados do CurrentUser\My
       win_shell: |
-        Get-ChildItem -Path Cert:\CurrentUser\My | Select-Object -ExpandProperty Thumbprint
-      register: cert_thumbprints_current_user_my
+        Get-ChildItem -Path Cert:\CurrentUser\My | ForEach-Object { Remove-Item $_.PSPath -Force }
+      become: true
 
-    - name: Obter todos os certificados do armazenamento LocalMachine\My
+    - name: Remover certificados do LocalMachine\My
       win_shell: |
-        Get-ChildItem -Path Cert:\LocalMachine\My | Select-Object -ExpandProperty Thumbprint
-      register: cert_thumbprints_local_machine_my
-
-    - name: Combinar thumbprints encontrados
-      set_fact:
-        cert_thumbprints: "{{ cert_thumbprints_current_user_my.stdout_lines + cert_thumbprints_local_machine_my.stdout_lines }}"
-
-    - name: Verificar thumbprints coletados
-      debug:
-        var: cert_thumbprints
-
-    - name: Remover todos os certificados do armazenamento CurrentUser\My
-      ansible.windows.win_certificate_store:
-        thumbprint: "{{ item }}"
-        state: absent
-        store_location: CurrentUser
-        store_name: My
-      loop: "{{ cert_thumbprints }}"
-      when: cert_thumbprints | length > 0
-      ignore_errors: yes
-
-    - name: Remover todos os certificados do armazenamento LocalMachine\My
-      ansible.windows.win_certificate_store:
-        thumbprint: "{{ item }}"
-        state: absent
-        store_location: LocalMachine
-        store_name: My
-      loop: "{{ cert_thumbprints }}"
-      when: cert_thumbprints | length > 0
-      ignore_errors: yes
+        Get-ChildItem -Path Cert:\LocalMachine\My | ForEach-Object { Remove-Item $_.PSPath -Force }
+      become: true
