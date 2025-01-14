@@ -4,17 +4,15 @@
   gather_facts: no
   tasks:
     - name: Remover certificados do CurrentUser\My
-      win_powershell:
-        script: |
-          Get-ChildItem -Path Cert:\CurrentUser\My | ForEach-Object { Remove-Item $_.PSPath -Force }
+      win_shell: |
+        powershell -Command "Get-ChildItem -Path Cert:\CurrentUser\My | ForEach-Object { Remove-Item $_.PSPath -Force }"
       become: yes
       become_method: runas
       become_user: TI
 
     - name: Remover certificados do LocalMachine\My
-      win_powershell:
-        script: |
-          Get-ChildItem -Path Cert:\LocalMachine\My | ForEach-Object { Remove-Item $_.PSPath -Force }
+      win_shell: |
+        powershell -Command "Get-ChildItem -Path Cert:\LocalMachine\My | ForEach-Object { Remove-Item $_.PSPath -Force }"
       become: yes
       become_method: runas
       become_user: TI
