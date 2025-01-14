@@ -1,13 +1,18 @@
 ---
-- name: Copiar e executar o arquivo .exe
+- name: Remover todos os certificados dos hosts Windows
   hosts: windows
+  gather_facts: no
   tasks:
-    - name: Copiar o arquivo .exe para o diretório C:\Windows\Temp do host
-      ansible.builtin.copy:
-        src: /home/micro11/aaaaaaa.exe
-        dest: C:\Windows\Temp\aaaaaaa.exe
+    - name: Obter todos os certificados armazenados
+      win_certificate_store:
+        store_name: "My"
+        state: "list"
+      register: certs
 
-    - name: Executar o arquivo .exe
-      win_command: C:\Windows\Temp\aaaaaaa.exe
-      args:
-        chdir: C:\Windows\Temp
+    - name: Remover os certificados
+      win_certificate_store:
+        store_name: "My"
+        thumbprint: "{{ item.thumbprint }}"
+        state: "absent"
+      loop: "{{ certs.certificates }}"
+      when: certs.certificates is defined
