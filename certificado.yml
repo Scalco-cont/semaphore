@@ -1,21 +1,40 @@
+---
 - name: Remover certificados expirados em máquinas Windows
   hosts: windows
   gather_facts: no
   tasks:
     - name: Remover certificados expirados do usuário atual
-      ansible.builtin.win_powershell: |
+      ansible.builtin.win_shell: |
+        # Elevando o script para executar com privilégios de administrador
         $certificates = Get-ChildItem Cert:\CurrentUser\My
+
         foreach ($cert in $certificates) {
             if ($cert.NotAfter -lt (Get-Date)) {
-                Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                try {
+                    Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
+                } catch {
+                    Write-Host "Falha ao remover o certificado $($cert.Subject): $_" -ForegroundColor Red
+                }
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
             }
         }
 
     - name: Remover certificados expirados do LocalMachine
-      ansible.builtin.win_powershell: |
+      ansible.builtin.win_shell: |
+        # Elevando o script para executar com privilégios de administrador
         $certificates = Get-ChildItem Cert:\LocalMachine\My
+
         foreach ($cert in $certificates) {
             if ($cert.NotAfter -lt (Get-Date)) {
-                Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                try {
+                    Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
+                } catch {
+                    Write-Host "Falha ao remover o certificado $($cert.Subject): $_" -ForegroundColor Red
+                }
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
             }
         }
