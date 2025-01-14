@@ -26,6 +26,7 @@
         }
       become: yes
       become_method: runas
+      become_user: 'Administrador'  # Substitua 'Administrador' pelo nome de um usuário administrador
 
     - name: Remover certificados expirados do LocalMachine
       ansible.builtin.win_shell: |
@@ -50,3 +51,4 @@
         }
       become: yes
       become_method: runas
+      become_user: 'Administrador'  # Substitua 'Administrador' pelo nome de um usuário administrador
