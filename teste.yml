@@ -1,6 +1,6 @@
 ---
 - name: Executar script Python no Windows
-  hosts: seus_hosts_windows
+  hosts: windows
   become: yes
   become_user: TI  # Eleva para o usuário Administrador
   tasks:
