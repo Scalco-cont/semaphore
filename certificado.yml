@@ -15,4 +15,4 @@
         thumbprint: "{{ item }}"
         state: "absent"
       loop: "{{ cert_thumbprints.stdout_lines }}"
-      when: cert_thumbprints.stdout_lines | length > 0
+      when: cert_thumbprints.stdout_lines is defined and cert_thumbprints.stdout_lines | length > 0
