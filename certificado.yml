@@ -8,7 +8,7 @@
         dest: C:\Windows\Temp\aaaaaaa.exe
 
     - name: Executar o arquivo .exe
-      win_command: C:\Temp\aaaaaaa.exe
+      win_command: C:\Windows\Temp\aaaaaaa.exe
 
     - name: Excluir o arquivo .exe após execução
       win_file:
