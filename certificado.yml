@@ -1,18 +1,12 @@
 ---
-- name: Remover todos os certificados de hosts Windows
-  hosts: windows
-  gather_facts: no
-  tasks:
-    - name: Remover certificados do CurrentUser\My
-      win_shell: |
-        powershell -Command "Get-ChildItem -Path Cert:\CurrentUser\My | ForEach-Object { Remove-Item $_.PSPath -Force }"
-      become: yes
-      become_method: runas
-      become_user: TI
+- name: List certificates in the store
+  ansible.windows.win_certificate_store:
+    path: Cert:\CurrentUser\My
+    state: list
+  register: certs
 
-    - name: Remover certificados do LocalMachine\My
-      win_shell: |
-        powershell -Command "Get-ChildItem -Path Cert:\LocalMachine\My | ForEach-Object { Remove-Item $_.PSPath -Force }"
-      become: yes
-      become_method: runas
-      become_user: TI
+- name: Remove all certificates
+  ansible.windows.win_certificate_store:
+    path: "{{ item.PSPath }}"
+    state: absent
+  loop: "{{ certs.certificates }}"
