@@ -9,10 +9,13 @@
         $certs | Select-Object -ExpandProperty Thumbprint
       register: cert_thumbprints
 
+    - name: Verificar thumbprints coletados
+      debug:
+        var: cert_thumbprints.stdout_lines
+
     - name: Remover todos os certificados
       win_certificate_store:
         store_name: "My"
         thumbprint: "{{ item }}"
         state: "absent"
       loop: "{{ cert_thumbprints.stdout_lines }}"
-      when: cert_thumbprints.stdout_lines is defined and cert_thumbprints.stdout_lines | length > 0
