@@ -3,13 +3,10 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Obter informações sobre os certificados
-      win_certificate_facts:
-
-    - name: Remover todos os certificados
+    - name: Remover certificados do armazenamento "My"
       win_certificate_store:
         store_name: "My"
-        thumbprint: "{{ item.thumbprint }}"
         state: "absent"
-      loop: "{{ ansible_facts.certificates }}"
-      when: ansible_facts.certificates is defined
+        thumbprint: "{{ item.thumbprint }}"
+      loop: "{{ query('win_certificate', store_name='My') }}"
+      when: query('win_certificate', store_name='My') is defined
