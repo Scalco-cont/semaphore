@@ -1,21 +1,36 @@
 ---
-- name: Remover certificados digitais de máquinas Windows
+- name: Remover certificados expirados em máquinas Windows
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Listar certificados no armazenamento
-      community.windows.win_certificate_store:
-        path: 'Cert:\LocalMachine\My'
-      register: certs
+    - name: Remover certificados expirados do usuário atual
+      ansible.builtin.win_shell: |
+        # Obter certificados no repositório do usuário atual
+        $certificates = Get-ChildItem Cert:\CurrentUser\My
 
-    - name: Exibir certificados encontrados
-      ansible.builtin.debug:
-        var: certs.certificates
+        # Iterar pelos certificados
+        foreach ($cert in $certificates) {
+            # Verificar a validade
+            if ($cert.NotAfter -lt (Get-Date)) {
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
+            }
+        }
 
-    - name: Remover certificados digitais
-      community.windows.win_certificate_store:
-        path: 'Cert:\LocalMachine\My'
-        state: absent
-        thumbprint: "{{ item.thumbprint }}"
-      with_items: "{{ certs.certificates }}"
-      when: certs.certificates | length > 0
+    - name: Remover certificados expirados do LocalMachine
+      ansible.builtin.win_shell: |
+        # Obter certificados no repositório da máquina local
+        $certificates = Get-ChildItem Cert:\LocalMachine\My
+
+        # Iterar pelos certificados
+        foreach ($cert in $certificates) {
+            # Verificar a validade
+            if ($cert.NotAfter -lt (Get-Date)) {
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
+            }
+        }
