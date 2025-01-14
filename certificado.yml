@@ -1,6 +1,8 @@
 ---
-- name: Remover certificados expirados
+- name: Remover certificados expirados com permissão elevada
   hosts: windows
+  become: yes
+  become_user: TI
   tasks:
     - name: Remover certificados expirados
       win_shell: |
