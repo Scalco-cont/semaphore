@@ -2,7 +2,7 @@
 - name: Executar script Python no Windows
   hosts: windows
   become: yes
-  become_user: TI  # Eleva para o usuário Administrador
+  become_user: TI  # Se necessário para o acesso
   tasks:
     - name: Executar script Python
-      win_shell: python C:\Windows\Temp\script.py
+      win_command: python C:\Windows\Temp\script.py
