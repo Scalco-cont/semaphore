@@ -1,6 +1,24 @@
 ---
-- name: Executar script Python no Windows
+- name: Instalar Python e rodar script Python no Windows
   hosts: windows
   tasks:
+    # Verificar se o Python está instalado
+    - name: Verificar se o Python está instalado
+      win_command: python --version
+      register: python_version
+      ignore_errors: yes
+
+    # Instalar o Python se não estiver instalado
+    - name: Baixar e instalar o Python
+      win_get_url:
+        url: https://www.python.org/ftp/python/3.9.6/python-3.9.6.exe
+        dest: C:\Windows\Temp\python-installer.exe
+      when: python_version.rc != 0
+
+    - name: Executar o instalador do Python
+      win_command: C:\Windows\Temp\python-installer.exe /quiet InstallAllUsers=1 PrependPath=1
+      when: python_version.rc != 0
+
+    # Rodar o script Python após instalação (ou se já estiver instalado)
     - name: Rodar o script Python
       win_command: python C:\Windows\Temp\script.py
