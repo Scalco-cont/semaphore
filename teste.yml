@@ -1,7 +1,8 @@
 ---
-- name: Executar script Python
-  hosts: windows
-  become: true  # Use isso se precisar de permissões elevadas
+- name: Executar script Python no Windows
+  hosts: seus_hosts_windows
+  become: yes
+  become_user: TI  # Eleva para o usuário Administrador
   tasks:
     - name: Executar script Python
-      command: python3 /caminho/do/seu/script.py
+      win_shell: python C:\Windows\Temp\script.py
