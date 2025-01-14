@@ -1,0 +1,6 @@
+---
+- name: Executar script Python no Windows
+  hosts: windows
+  tasks:
+    - name: Rodar o script Python
+      win_command: python C:\caminho\para\seu\script.py
