@@ -1,10 +1,10 @@
 - name: List all certificates in the current user's personal store
-  ansible.windows.win_shell: |
+  win_shell: |
     Get-ChildItem -Path Cert:\CurrentUser\My
   register: certificates
 
 - name: Remove all certificates from the current user's personal store
-  ansible.windows.win_shell: |
+  win_shell: |
     $certs = Get-ChildItem -Path Cert:\CurrentUser\My
     foreach ($cert in $certs) {
       Remove-Item -Path $cert.PSPath -Force
