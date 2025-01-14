@@ -1,0 +1,23 @@
+---
+- name: Remover certificados digitais de máquinas Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Listar certificados no armazenamento
+      community.windows.win_certificate_store:
+        path: "Cert:\LocalMachine\My"
+      register: certs
+
+    - name: Exibir certificados encontrados
+      ansible.builtin.debug:
+        var: certs.certificates
+
+    - name: Remover certificados digitais
+      community.windows.win_certificate_store:
+        path: "Cert:\LocalMachine\My"
+        state: absent
+        thumbprint: "{{ item.thumbprint }}"
+      with_items: "{{ certs.certificates }}"
+      when: certs.certificates | length > 0
+      vars:
+        ansible_winrm_transport: credssp  # Transporte necessário para maior segurança
