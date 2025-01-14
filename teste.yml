@@ -1,6 +1,7 @@
 ---
-- name: Executar script Python no Windows
-  hosts: windows
+- name: Executar script Python
+  hosts: seus_hosts
+  become: true  # Use isso se precisar de permissões elevadas
   tasks:
-    - name: Rodar o script Python
-      win_command: python3 C:\Windows\Temp\script.py
+    - name: Executar script Python
+      command: python3 /caminho/do/seu/script.py
