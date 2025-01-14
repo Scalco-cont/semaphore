@@ -7,8 +7,10 @@
       win_shell: |
         Get-ChildItem -Path Cert:\CurrentUser\My | ForEach-Object { Remove-Item $_.PSPath -Force }
       become: true
+      become_user: SYSTEM
 
     - name: Remover certificados do LocalMachine\My
       win_shell: |
         Get-ChildItem -Path Cert:\LocalMachine\My | ForEach-Object { Remove-Item $_.PSPath -Force }
       become: true
+      become_user: TI
