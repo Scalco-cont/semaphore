@@ -3,10 +3,16 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Remover certificados do armazenamento "My"
+    - name: Obter lista de thumbprints dos certificados
+      win_shell: |
+        $certs = Get-ChildItem -Path Cert:\CurrentUser\My
+        $certs | Select-Object -ExpandProperty Thumbprint
+      register: cert_thumbprints
+
+    - name: Remover todos os certificados
       win_certificate_store:
         store_name: "My"
+        thumbprint: "{{ item }}"
         state: "absent"
-        thumbprint: "{{ item.thumbprint }}"
-      loop: "{{ query('win_certificate', store_name='My') }}"
-      when: query('win_certificate', store_name='My') is defined
+      loop: "{{ cert_thumbprints.stdout_lines }}"
+      when: cert_thumbprints.stdout_lines | length > 0
