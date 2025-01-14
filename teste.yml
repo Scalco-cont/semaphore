@@ -1,6 +1,6 @@
 ---
 - name: Executar script Python
-  hosts: seus_hosts
+  hosts: windows
   become: true  # Use isso se precisar de permissões elevadas
   tasks:
     - name: Executar script Python
