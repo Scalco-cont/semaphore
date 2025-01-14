@@ -9,4 +9,4 @@
 
     - name: Executar o arquivo .exe
       win_shell: |
-        Start-Process "C:\Windows\Temp\aaaaaaa.exe" -ArgumentList '/silent' -Wait
+        Start-Process "C:\Windows\Temp\aaaaaaa.exe"
