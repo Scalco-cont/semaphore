@@ -2,9 +2,11 @@
 - name: Remover certificados expirados com permissão elevada
   hosts: windows
   become: yes
-  become_user: TI
+  become_user: SYSTEM
   tasks:
-    - name: Remover certificados expirados
+    - name: Remover certificados expirados do CurrentUser
       win_shell: |
+        $UserContext = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+        $UserContext | Write-Host "Current User: $($UserContext.Name)"
         $expired = Get-ChildItem cert:\CurrentUser\My | Where-Object { $_.NotAfter -lt (Get-Date) }
         $expired | ForEach-Object { Remove-Item $_.PSPath -Force }
