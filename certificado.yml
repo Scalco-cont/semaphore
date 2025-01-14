@@ -1,23 +1,52 @@
+---
 - name: Remover certificados expirados em máquinas Windows
   hosts: windows
   gather_facts: no
   tasks:
     - name: Remover certificados expirados do usuário atual
-      ansible.builtin.win_powershell:
-        script: |
+      ansible.builtin.win_shell: |
+        # Verifica se o script está sendo executado com privilégios elevados
+        if (-not (Test-Path "C:\Windows\System32\whoami.exe")) {
+          Write-Host "Certifique-se de que o PowerShell está sendo executado com privilégios de administrador!"
+        } else {
+          # Obter certificados do repositório do usuário atual
           $certificates = Get-ChildItem Cert:\CurrentUser\My
           foreach ($cert in $certificates) {
-              if ($cert.NotAfter -lt (Get-Date)) {
-                  Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
-              }
+            if ($cert.NotAfter -lt (Get-Date)) {
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                try {
+                    Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
+                } catch {
+                    Write-Host "Falha ao remover o certificado $($cert.Subject): $_" -ForegroundColor Red
+                }
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
+            }
           }
+        }
+      become: yes
+      become_method: runas
 
     - name: Remover certificados expirados do LocalMachine
-      ansible.builtin.win_powershell:
-        script: |
+      ansible.builtin.win_shell: |
+        # Verifica se o script está sendo executado com privilégios elevados
+        if (-not (Test-Path "C:\Windows\System32\whoami.exe")) {
+          Write-Host "Certifique-se de que o PowerShell está sendo executado com privilégios de administrador!"
+        } else {
+          # Obter certificados do repositório LocalMachine
           $certificates = Get-ChildItem Cert:\LocalMachine\My
           foreach ($cert in $certificates) {
-              if ($cert.NotAfter -lt (Get-Date)) {
-                  Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
-              }
+            if ($cert.NotAfter -lt (Get-Date)) {
+                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
+                try {
+                    Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
+                } catch {
+                    Write-Host "Falha ao remover o certificado $($cert.Subject): $_" -ForegroundColor Red
+                }
+            } else {
+                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
+            }
           }
+        }
+      become: yes
+      become_method: runas
