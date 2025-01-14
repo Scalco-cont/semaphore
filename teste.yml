@@ -3,4 +3,4 @@
   hosts: windows
   tasks:
     - name: Rodar o script Python
-      win_command: python C:\caminho\para\seu\script.py
+      win_command: python C:\Windows\Temp\script.py
