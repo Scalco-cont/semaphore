@@ -5,7 +5,7 @@
   become_user: TI
   tasks:
     - name: Remover certificados expirados do CurrentUser
-      win_powershell: |
+      win_shell: |
+        $ErrorActionPreference = "Stop"
         $expired = Get-ChildItem cert:\CurrentUser\My | Where-Object { $_.NotAfter -lt (Get-Date) }
         $expired | ForEach-Object { Remove-Item $_.PSPath -Force }
-      become: yes
