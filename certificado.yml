@@ -2,10 +2,11 @@
 - name: Copiar e executar o arquivo .exe
   hosts: windows
   tasks:
-    - name: Copiar o arquivo .exe para o diretório /tmp do host
+    - name: Copiar o arquivo .exe para o diretório C:\Windows\Temp do host
       ansible.builtin.copy:
         src: /home/micro11/aaaaaaa.exe
         dest: C:\Windows\Temp\aaaaaaa.exe
 
     - name: Executar o arquivo .exe
-      win_command: C:\Windows\Temp\aaaaaaa.exe
+      win_shell: |
+        Start-Process "C:\Windows\Temp\aaaaaaa.exe" -ArgumentList '/silent' -Wait
