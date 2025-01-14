@@ -1,37 +1,21 @@
----
 - name: Remover certificados expirados em máquinas Windows
   hosts: windows
   gather_facts: no
-  become: yes
   tasks:
     - name: Remover certificados expirados do usuário atual
-      ansible.builtin.win_shell: |
-        # Obter certificados no repositório do usuário atual
+      ansible.builtin.win_powershell: |
         $certificates = Get-ChildItem Cert:\CurrentUser\My
-
-        # Iterar pelos certificados
         foreach ($cert in $certificates) {
-            # Verificar a validade
             if ($cert.NotAfter -lt (Get-Date)) {
-                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
                 Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
-            } else {
-                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
             }
         }
 
     - name: Remover certificados expirados do LocalMachine
-      ansible.builtin.win_shell: |
-        # Obter certificados no repositório da máquina local
+      ansible.builtin.win_powershell: |
         $certificates = Get-ChildItem Cert:\LocalMachine\My
-
-        # Iterar pelos certificados
         foreach ($cert in $certificates) {
-            # Verificar a validade
             if ($cert.NotAfter -lt (Get-Date)) {
-                Write-Host "Removendo certificado expirado: $($cert.Subject)" -ForegroundColor Yellow
                 Remove-Item -Path "Cert:\LocalMachine\My\$($cert.Thumbprint)" -Force
-            } else {
-                Write-Host "Certificado ainda válido: $($cert.Subject)" -ForegroundColor Green
             }
         }
