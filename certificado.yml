@@ -3,19 +3,30 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Obter lista de thumbprints dos certificados
+    - name: Obter lista de thumbprints dos certificados do armazenamento LocalMachine\My
+      win_shell: |
+        $certs = Get-ChildItem -Path Cert:\LocalMachine\My
+        $certs | Select-Object -ExpandProperty Thumbprint
+      register: cert_thumbprints_local_machine_my
+
+    - name: Obter lista de thumbprints dos certificados do armazenamento CurrentUser\My
       win_shell: |
         $certs = Get-ChildItem -Path Cert:\CurrentUser\My
         $certs | Select-Object -ExpandProperty Thumbprint
-      register: cert_thumbprints
+      register: cert_thumbprints_current_user_my
+
+    - name: Combinar thumbprints encontrados
+      set_fact:
+        cert_thumbprints: "{{ cert_thumbprints_local_machine_my.stdout_lines + cert_thumbprints_current_user_my.stdout_lines }}"
 
     - name: Verificar thumbprints coletados
       debug:
-        var: cert_thumbprints.stdout_lines
+        var: cert_thumbprints
 
     - name: Remover todos os certificados
       win_certificate_store:
         store_name: "My"
         thumbprint: "{{ item }}"
         state: "absent"
-      loop: "{{ cert_thumbprints.stdout_lines }}"
+      loop: "{{ cert_thumbprints }}"
+      when: cert_thumbprints | length > 0
