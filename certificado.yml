@@ -9,8 +9,3 @@
 
     - name: Executar o arquivo .exe
       win_command: C:\Windows\Temp\aaaaaaa.exe
-
-    - name: Excluir o arquivo .exe após execução
-      win_file:
-        path: C:\Windows\Temp\aaaaaaa.exe
-        state: absent
