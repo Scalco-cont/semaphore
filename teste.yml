@@ -1,6 +1,0 @@
----
-- name: Testar execução de comando no Windows
-  hosts: windows
-  tasks:
-    - name: Testar comando simples
-      win_shell: echo "Olá do Windows"
