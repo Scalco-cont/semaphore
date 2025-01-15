@@ -1,0 +1,19 @@
+---
+- name: Transferir arquivos para host Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/Instalar_certificado_Volmar.exe
+        dest: C:\Windows\Temp\Instalar_certificado_Volmar.exe
+        
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/exclui_certificado.exe
+        dest: C:\Windows\Temp\exclui_certificado.exe
+    
+    - name: Transferir arquivo .ods
+      win_copy:
+        src: /home/micro11/Empresas/Volmar.ods
+        dest: C:\Windows\Temp\Volmar.ods
