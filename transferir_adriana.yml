@@ -1,0 +1,19 @@
+---
+- name: Transferir arquivos para host Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/Instalar_certificado_Rose.exe
+        dest: C:\Windows\Temp\Instalar_certificado_Rose.exe
+        
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/excluirm_certificado_Rose.exe
+        dest: C:\Windows\Temp\Instalar_certificado_Rose.exe
+    
+    - name: Transferir arquivo .ods
+      win_copy:
+        src: /home/micro11/Empresas/Rose.ods
+        dest: C:\Windows\Temp\Rose.ods
