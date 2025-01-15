@@ -6,9 +6,9 @@
     - name: Transferir arquivo .exe
       win_copy:
         src: /home/micro11/Script/Instalar_certificado_Rose.exe
-        dest: C:\Windows\Temp\Instalar_certificado_Adriana.exe
+        dest: C:\Windows\Temp\Instalar_certificado_Rose.exe
 
     - name: Transferir arquivo .ods
       win_copy:
         src: /home/micro11/Empresas/Rose.ods
-        dest: C:\Windows\Temp\Planilha_Dados.ods
+        dest: C:\Windows\Temp\Rose.ods
