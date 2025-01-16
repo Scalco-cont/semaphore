@@ -10,8 +10,8 @@
         
     - name: Transferir arquivo .exe
       win_copy:
-        src: /home/micro11/Script/exclui_certificado.exe
-        dest: C:\Windows\Temp\exclui_certificado.exe
+        src: /home/micro11/Script/excluir_certificado.exe
+        dest: C:\Windows\Temp\excluir_certificado.exe
     
     - name: Transferir arquivo .ods
       win_copy:
