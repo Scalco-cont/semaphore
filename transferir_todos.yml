@@ -1,1 +1,19 @@
-
+---
+- name: Transferir arquivos para host Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/Instalar_certificado_Adriana.exe
+        dest: C:\Windows\Temp\Instalar_certificado_Adriana.exe
+        
+    - name: Transferir arquivo .exe
+      win_copy:
+        src: /home/micro11/Script/excluir_certificado.exe
+        dest: C:\Windows\Temp\excluir_certificado.exe
+    
+    - name: Transferir arquivo .ods
+      win_copy:
+        src: /home/micro11/Empresas/Todos.ods
+        dest: C:\Windows\Temp\Adriana.ods
