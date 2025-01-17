@@ -6,14 +6,14 @@
     - name: Transferir arquivo .exe
       win_copy:
         src: /home/micro11/Script/Instalar_certificado_Sandra.exe
-        dest: C:\Windows\Temp\Instalar_certificado_Sandra.exe
+        dest: C:\Windows\Instalar_certificado_Sandra.exe
         
     - name: Transferir arquivo .exe
       win_copy:
         src: /home/micro11/Script/excluir_certificado.exe
-        dest: C:\Windows\Temp\excluir_certificado.exe
+        dest: C:\Windows\excluir_certificado.exe
     
     - name: Transferir arquivo .ods
       win_copy:
         src: /home/micro11/Empresas/Sandra.ods
-        dest: C:\Windows\Temp\Sandra.ods
+        dest: C:\Windows\Sandra.ods
