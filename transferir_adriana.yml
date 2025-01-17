@@ -6,14 +6,14 @@
     - name: Transferir o instalador do certificado
       win_copy:
         src: /home/micro11/Script/Instalar_certificado_Adriana.exe
-        dest: C:\Windows\Temp\Instalar_certificado_Adriana.exe
+        dest: C:\Windows\Instalar_certificado_Adriana.exe
 
     - name: Transferir o script de exclusão de certificado
       win_copy:
         src: /home/micro11/Script/excluir_certificado.exe
-        dest: C:\Windows\Temp\excluir_certificado.exe
+        dest: C:\Windows\excluir_certificado.exe
 
     - name: Transferir a planilha Adriana.ods
       win_copy:
         src: /home/micro11/Empresas/Adriana.ods
-        dest: C:\Windows\Temp\Adriana.ods
+        dest: C:\Windows\Adriana.ods
