@@ -1,0 +1,14 @@
+---
+- name: Instalar a nova versão do LibreOffice no Windows
+  hosts: windows
+  tasks:
+    - name: Transferir o instalador do certificado
+      win_copy:
+        src: /home/micro11/pacotes/nomachine_8.15.3_1_x64.exe
+        dest: C:\Windows\nomachine_8.15.3_1_x64.exe
+
+    - name: Instalar o LibreOffice
+      win_package:
+        path: C:\Windows\nomachine_8.15.3_1_x64.exe
+        arguments: /quiet
+        state: present
