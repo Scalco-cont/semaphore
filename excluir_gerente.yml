@@ -1,0 +1,9 @@
+---
+- name: Transferir arquivos para host Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Transferir o script de exclusão de certificado
+      win_copy:
+        src: /home/micro11/Script/excluir_certificado_gerentes.exe
+        dest: C:\Windows\excluir_certificado.exe
