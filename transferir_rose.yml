@@ -3,17 +3,17 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Transferir arquivo .exe
+    - name: Transferir arquivo .exe - Instalador Certificado
       win_copy:
         src: /home/micro11/Script/Instalar_certificado_Rose.exe
         dest: C:\Windows\Instalar_certificado_Rose.exe
         
-    - name: Transferir arquivo .exe
+    - name: Transferir arquivo .exe - Exclui Certificado
       win_copy:
         src: /home/micro11/Script/excluir_certificado.exe
         dest: C:\Windows\excluir_certificado.exe
     
-    - name: Transferir arquivo .ods
+    - name: Transferir arquivo .ods - Planilha Certificado
       win_copy:
         src: /home/micro11/Empresas/Rose.ods
         dest: C:\Windows\Rose.ods
