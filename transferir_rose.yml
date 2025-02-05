@@ -15,5 +15,5 @@
     
     - name: Transferir arquivo .ods - Planilha Certificado
       win_copy:
-        src: /home/micro11/Empresas/Rose.ods
+        src: /home/micro11/Empresas/Rosenete.ods
         dest: C:\Windows\Rose.ods
