@@ -1,0 +1,29 @@
+---
+- name: Coletar Chave de Licença do Windows e Enviar para o Servidor
+  hosts: windows
+  gather_facts: yes
+  tasks:
+    - name: Executar PowerShell para obter chave do Windows
+      win_shell: |
+        (Get-WmiObject -query 'select * from SoftwareLicensingService').OA3xOriginalProductKey
+      register: license_key
+
+    - name: Salvar resultado em um arquivo CSV local
+      delegate_to: localhost
+      copy:
+        content: "{{ inventory_hostname }},{{ license_key.stdout }}\n"
+        dest: "/tmp/windows_licenses.csv"
+        mode: '0644'
+      when: license_key.stdout is defined and license_key.stdout != ""
+
+    - name: Copiar arquivo CSV para o servidor
+      fetch:
+        src: "/tmp/windows_licenses.csv"
+        dest: "/opt/windows_licenses.csv"
+        flat: yes
+
+    - name: Converter CSV para ODS
+      delegate_to: localhost
+      shell: "libreoffice --headless --convert-to ods /opt/windows_licenses.csv --outdir /opt/"
+      args:
+        creates: "/opt/windows_licenses.ods"
