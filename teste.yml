@@ -16,11 +16,10 @@
         mode: '0644'
       when: license_key.stdout is defined and license_key.stdout != ""
 
-    - name: Copiar arquivo CSV para o servidor
-      fetch:
+    - name: Transferir arquivo CSV para o servidor
+      win_copy:
         src: "/tmp/windows_licenses.csv"
-        dest: "/opt/windows_licenses.csv"
-        flat: yes
+        dest: "C:\\Windows\\windows_licenses.csv"
 
     - name: Converter CSV para ODS
       delegate_to: localhost
