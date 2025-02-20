@@ -21,4 +21,4 @@
     - name: Criar arquivo CSV consolidado
       shell: |
         echo "Nome do Computador;Endereço MAC;Chave do Windows" > /tmp/chaves.csv
-        cat /tmp/* >> /tmp//chaves.csv
+        cat /tmp/* >> /tmp/chaves.csv
