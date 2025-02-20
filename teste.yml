@@ -20,5 +20,5 @@
   tasks:
     - name: Criar arquivo CSV consolidado
       shell: |
-        echo "Nome do Computador;Endereço MAC;Chave do Windows" > /home/micro11/Empresas/chaves.csv
-        cat /home/micro11/Empresas/* >> /home/micro11/Empresas/chaves.csv
+        echo "Nome do Computador;Endereço MAC;Chave do Windows" > /tmp/chaves.csv
+        cat /tmp/* >> /tmp//chaves.csv
