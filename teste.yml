@@ -1,12 +1,6 @@
 - name: Coletar chaves do Windows das máquinas
   hosts: windows
   tasks:
-    - name: Copiar script VBScript para as máquinas
-      win_copy:
-        src: /home/micro11/Script/chave_windows.vbs
-        dest: C:\Windows\chave_windows.vbs
-
-
     - name: Coletar arquivos gerados
       fetch:
         src: C:\Windows\chave_windows.txt
