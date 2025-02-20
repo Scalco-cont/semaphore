@@ -6,3 +6,9 @@
       win_copy:
         src: /home/micro11/Script/chave_windows.vbs
         dest: C:\Windows\chave_windows.vbs
+
+    - name: Executar script com credenciais
+      win_shell: |
+        $securePassword = ConvertTo-SecureString "Sc4lc0*" -AsPlainText -Force
+        $cred = New-Object System.Management.Automation.PSCredential("TI", $securePassword)
+        Start-Process "C:\Windows\System32\cscript.exe" -ArgumentList "C:\Windows\chave_windows.vbs" -Credential $cred
