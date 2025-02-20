@@ -6,8 +6,6 @@
         src: /home/micro11/Script/chave_windows.vbs
         dest: C:\Windows\chave_windows.vbs
 
-    - name: Executar o script VBScript
-      win_shell: cscript C:\Windows\chave_windows.vbs //B
 
     - name: Coletar arquivos gerados
       fetch:
