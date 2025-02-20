@@ -3,7 +3,7 @@
   tasks:
     - name: Coletar arquivos gerados
       fetch:
-        src: C:\Windows\chave_windows.txt
+        src: C:\Windows\Temp\chave_windows.txt
         dest: /tmp/  # Adicionada barra no final para indicar diretório
         flat: yes  # Mantém apenas os arquivos sem subpastas
 
