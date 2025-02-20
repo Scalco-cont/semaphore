@@ -1,28 +1,22 @@
 ---
-- name: Coletar Chave de Licença do Windows e Enviar para o Servidor
-  hosts: windows
-  gather_facts: yes
+- name: Coletar chaves do Windows das máquinas
+  hosts: windows  # Grupo de hosts no seu inventário
   tasks:
-    - name: Executar PowerShell para obter chave do Windows
-      win_shell: |
-        (Get-WmiObject -query 'select * from SoftwareLicensingService').OA3xOriginalProductKey
-      register: license_key
-
-    - name: Salvar resultado em um arquivo CSV local
-      delegate_to: localhost
-      copy:
-        content: "{{ inventory_hostname }},{{ license_key.stdout }}\n"
-        dest: "/tmp/windows_licenses.csv"
-        mode: '0644'
-      when: license_key.stdout is defined and license_key.stdout != ""
-
-    - name: Transferir arquivo CSV para o servidor
+    - name: Copiar script VBScript para as máquinas
       win_copy:
-        src: "/tmp/windows_licenses.csv"
-        dest: "C:\\Windows\\windows_licenses.csv"
+        src: \Script\chave_windows.vbs
+        dest: C:\Windows\chave_windows.vbs
 
-    - name: Converter CSV para ODS
-      delegate_to: localhost
-      shell: "libreoffice --headless --convert-to ods /opt/windows_licenses.csv --outdir /opt/"
-      args:
-        creates: "/opt/windows_licenses.ods"
+    - name: Coletar arquivos gerados
+      fetch:
+        src: C:\Windows\chave_windows.txt
+        dest: /home/micro11/Empresas
+        flat: yes  # Mantém apenas os arquivos sem subpastas
+
+- name: Consolidar chaves em um único CSV
+  hosts: localhost
+  tasks:
+    - name: Criar arquivo CSV consolidado
+      shell: |
+        echo "Nome do Computador;Chave do Windows" > chaves.csv
+        cat chaves/* >> chaves.csv
