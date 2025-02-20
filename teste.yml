@@ -4,7 +4,7 @@
   tasks:
     - name: Copiar script VBScript para as máquinas
       win_copy:
-        src: \Script\chave_windows.vbs
+        src: /home/micro11/Script/chave_windows.vbs
         dest: C:\Windows\chave_windows.vbs
 
     - name: Coletar arquivos gerados
