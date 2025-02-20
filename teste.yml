@@ -1,17 +1,18 @@
----
 - name: Coletar chaves do Windows das máquinas
-  hosts: windows  # Grupo de hosts no seu inventário
+  hosts: windows
   tasks:
     - name: Copiar script VBScript para as máquinas
       win_copy:
         src: /home/micro11/Script/chave_windows.vbs
         dest: C:\Windows\chave_windows.vbs
-        
+
+    - name: Executar o script VBScript
+      win_shell: cscript C:\Windows\chave_windows.vbs //B
 
     - name: Coletar arquivos gerados
       fetch:
         src: C:\Windows\chave_windows.txt
-        dest: /home/micro11/Empresas
+        dest: /home/micro11/Empresas/  # Adicionada barra no final para indicar diretório
         flat: yes  # Mantém apenas os arquivos sem subpastas
 
 - name: Consolidar chaves em um único CSV
@@ -19,5 +20,5 @@
   tasks:
     - name: Criar arquivo CSV consolidado
       shell: |
-        echo "Nome do Computador;Chave do Windows" > chaves.csv
-        cat chaves/* >> chaves.csv
+        echo "Nome do Computador;Endereço MAC;Chave do Windows" > /home/micro11/Empresas/chaves.csv
+        cat /home/micro11/Empresas/* >> /home/micro11/Empresas/chaves.csv
