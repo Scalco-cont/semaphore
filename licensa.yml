@@ -9,4 +9,4 @@
 
     - name: Executar script com credenciais usando runas
       win_shell: |
-        Start-Process "runas.exe" -ArgumentList "/user:teste 'cscript.exe C:\Windows\chave_windows.vbs'"
+        Start-Process "runas.exe" -ArgumentList '/user:teste "C:\Windows\System32\cscript.exe" "C:\Windows\chave_windows.vbs"'
