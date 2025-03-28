@@ -1,19 +1,19 @@
 ---
-- name: Baixar e instalar atualizações do Windows com reinícios
+- name: Atualizar Windows via Windows Update
   hosts: windows
   gather_facts: false
   tasks:
-
-    - name: Baixar as atualizações do Windows (sem instalar)
+    - name: Baixar e instalar todas as atualizações de segurança
       ansible.windows.win_updates:
-        category_names: '*'
-        state: downloaded
-
-    - name: Reiniciar após o download das atualizações
-      ansible.windows.win_reboot:
-      when: ansible_windows_update.downloaded > 0  # Reinicia apenas se houver atualizações baixadas
-
-    - name: Instalar as atualizações baixadas e reiniciar se necessário
-      ansible.windows.win_updates:
-        category_names: '*'
+        state: installed
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
         reboot: true
+      register: update_results
+
+    - name: Exibir o resultado das atualizações aplicadas
+      debug:
+        var: update_results
