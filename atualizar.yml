@@ -1,14 +1,19 @@
-- name: Force Update LibreOffice with Chocolatey
-  hosts: all
+---
+- name: Baixar e instalar atualizações do Windows com reinícios
+  hosts: windows
+  gather_facts: false
   tasks:
 
-    - name: Ensure Chocolatey itself is installed
-      win_chocolatey:
-        name: chocolatey
-        state: latest
+    - name: Baixar as atualizações do Windows (sem instalar)
+      ansible.windows.win_updates:
+        category_names: '*'
+        state: downloaded
 
-    - name: Force update LibreOffice
-      win_chocolatey:
-        name: nomachine
-        state: latest
-        force: yes
+    - name: Reiniciar após o download das atualizações
+      ansible.windows.win_reboot:
+      when: ansible_windows_update.downloaded > 0  # Reinicia apenas se houver atualizações baixadas
+
+    - name: Instalar as atualizações baixadas e reiniciar se necessário
+      ansible.windows.win_updates:
+        category_names: '*'
+        reboot: true
