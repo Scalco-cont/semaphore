@@ -1,0 +1,181 @@
+---
+- name: Desinstalar McAfee WebAdvisor
+  hosts: windows
+  gather_facts: yes
+  tasks:
+    - name: Verificar se o McAfee WebAdvisor está instalado
+      win_shell: Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*McAfee WebAdvisor*" -or $_.Name -like "*McAfee Web Advisor*" } | Select-Object Name, Version
+      register: mcafee_check
+      ignore_errors: yes
+
+    - name: Exibir informações do McAfee WebAdvisor se encontrado
+      debug:
+        msg: "McAfee WebAdvisor encontrado: {{ mcafee_check.stdout }}"
+      when: mcafee_check.stdout | length > 0
+
+    # Método 1: Chocolatey (se disponível)
+    - name: Verificar se o Chocolatey está instalado
+      win_shell: if (Get-Command choco -ErrorAction SilentlyContinue) { Write-Output $true } else { Write-Output $false }
+      register: choco_installed
+      ignore_errors: yes
+
+    - name: Desinstalar McAfee WebAdvisor usando Chocolatey
+      win_chocolatey:
+        name: mcafee-webadvisor
+        state: absent
+      when: choco_installed.stdout | trim == "True"
+      ignore_errors: yes
+
+    # Método 2: Uninstall via MSI GUID 
+    - name: Obter GUID de desinstalação do McAfee WebAdvisor
+      win_shell: |
+        Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | 
+          Where-Object { $_.DisplayName -like "*McAfee WebAdvisor*" } | 
+          Select-Object -ExpandProperty UninstallString -ErrorAction SilentlyContinue
+        
+        Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | 
+          Where-Object { $_.DisplayName -like "*McAfee WebAdvisor*" } | 
+          Select-Object -ExpandProperty UninstallString -ErrorAction SilentlyContinue
+      register: uninstall_string
+      ignore_errors: yes
+
+    - name: Executar comando de desinstalação do McAfee WebAdvisor via GUID
+      win_shell: "{{ item | regex_replace('msiexec.exe /[iI]', 'msiexec.exe /x') }} /qn REBOOT=ReallySuppress"
+      with_items: "{{ uninstall_string.stdout_lines }}"
+      when: uninstall_string.stdout_lines is defined and uninstall_string.stdout_lines | length > 0
+      ignore_errors: yes
+
+    # Método 3: Desinstalação direta usando Win32_Product
+    - name: Desinstalar McAfee WebAdvisor usando Win32_Product
+      win_shell: |
+        $app = Get-WmiObject -Class Win32_Product | Where-Object { 
+            $_.Name -like "*McAfee WebAdvisor*" -or 
+            $_.Name -like "*McAfee Web Advisor*" 
+        }
+        if ($app) {
+            $app.Uninstall()
+            Write-Output "McAfee WebAdvisor desinstalado via WMI."
+        } else {
+            Write-Output "McAfee WebAdvisor não encontrado via WMI."
+        }
+      register: wmi_uninstall
+      ignore_errors: yes
+      when: mcafee_check.stdout | length > 0
+
+    # Método 4: Kill process e remover arquivos
+    - name: Encerrar processos do McAfee WebAdvisor
+      win_shell: |
+        Stop-Process -Name "McAfeeWebAdvisor" -Force -ErrorAction SilentlyContinue
+        Stop-Process -Name "McSACore" -Force -ErrorAction SilentlyContinue
+        Stop-Process -Name "*mcafee*" -Force -ErrorAction SilentlyContinue
+      ignore_errors: yes
+
+    - name: Desativar e remover serviços do McAfee WebAdvisor
+      win_shell: |
+        $services = Get-Service -Name "*McAfee*" -ErrorAction SilentlyContinue
+        foreach ($service in $services) {
+            Stop-Service -Name $service.Name -Force -ErrorAction SilentlyContinue
+            Set-Service -Name $service.Name -StartupType Disabled -ErrorAction SilentlyContinue
+            sc.exe delete $service.Name
+        }
+      ignore_errors: yes
+
+    - name: Remover diretórios do McAfee WebAdvisor
+      win_file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "C:/Program Files/McAfee/WebAdvisor"
+        - "C:/Program Files (x86)/McAfee/WebAdvisor"
+        - "C:/ProgramData/McAfee/WebAdvisor"
+      ignore_errors: yes
+
+    # Método 5: Remover extensões do navegador
+    - name: Remover extensões do Chrome
+      win_shell: |
+        $chromeUserDir = "$env:LOCALAPPDATA\Google\Chrome\User Data"
+        $profiles = Get-ChildItem -Path $chromeUserDir -Directory -Filter "Profile*" -ErrorAction SilentlyContinue
+        $profiles += Get-Item -Path "$chromeUserDir\Default" -ErrorAction SilentlyContinue
+        
+        foreach ($profile in $profiles) {
+            $extensionsDir = Join-Path $profile.FullName "Extensions"
+            if (Test-Path $extensionsDir) {
+                Get-ChildItem -Path $extensionsDir -Directory | Where-Object { 
+                    (Get-Content -Path (Join-Path $_.FullName "*\manifest.json") -ErrorAction SilentlyContinue) -match "McAfee"
+                } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        }
+      ignore_errors: yes
+
+    - name: Remover extensões do Edge
+      win_shell: |
+        $edgeUserDir = "$env:LOCALAPPDATA\Microsoft\Edge\User Data"
+        $profiles = Get-ChildItem -Path $edgeUserDir -Directory -Filter "Profile*" -ErrorAction SilentlyContinue
+        $profiles += Get-Item -Path "$edgeUserDir\Default" -ErrorAction SilentlyContinue
+        
+        foreach ($profile in $profiles) {
+            $extensionsDir = Join-Path $profile.FullName "Extensions"
+            if (Test-Path $extensionsDir) {
+                Get-ChildItem -Path $extensionsDir -Directory | Where-Object { 
+                    (Get-Content -Path (Join-Path $_.FullName "*\manifest.json") -ErrorAction SilentlyContinue) -match "McAfee"
+                } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        }
+      ignore_errors: yes
+
+    # Método 6: Limpar registro do Windows
+    - name: Limpar registros do Windows relacionados ao McAfee WebAdvisor
+      win_shell: |
+        $registryPaths = @(
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+        )
+
+        foreach ($path in $registryPaths) {
+            Get-ItemProperty -Path $path -ErrorAction SilentlyContinue | 
+            Where-Object { $_.DisplayName -like "*McAfee WebAdvisor*" } | 
+            ForEach-Object {
+                Write-Host "Removing registry entry: $($_.PSPath)"
+                Remove-Item $_.PSPath -Force -Recurse -ErrorAction SilentlyContinue
+            }
+        }
+
+        # Remover chaves de registro específicas
+        $registryKeys = @(
+            "HKLM:\SOFTWARE\McAfee\WebAdvisor",
+            "HKLM:\SOFTWARE\WOW6432Node\McAfee\WebAdvisor",
+            "HKCU:\SOFTWARE\McAfee\WebAdvisor"
+        )
+
+        foreach ($key in $registryKeys) {
+            if (Test-Path $key) {
+                Remove-Item -Path $key -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        }
+      ignore_errors: yes
+
+    # Verificação final
+    - name: Verificar se o McAfee WebAdvisor foi desinstalado
+      win_shell: Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*McAfee WebAdvisor*" -or $_.Name -like "*McAfee Web Advisor*" } | Select-Object Name, Version
+      register: final_check
+      ignore_errors: yes
+
+    - name: Exibir resultado da verificação final
+      debug:
+        msg: "{{ 'McAfee WebAdvisor foi completamente desinstalado!' if final_check.stdout | length == 0 else 'Algumas componentes do McAfee WebAdvisor podem ainda estar presentes: ' + final_check.stdout }}"
+
+    - name: Recomendar reinicialização
+      debug:
+        msg: "Recomendamos reiniciar o sistema para garantir que todas as alterações sejam aplicadas."
+
+
+
+# - name: Force Update LibreOffice with Chocolatey
+#   hosts: all
+#   tasks:
+
+#     - name: Ensure Chocolatey itself is installed
+#       win_chocolatey:
+#         name: chocolatey
+#         state: absent
