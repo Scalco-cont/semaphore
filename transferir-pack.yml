@@ -3,6 +3,11 @@
   hosts: windows
   tasks:
     # Transferência dos instaladores
+    - name: Transferir o instalador do WinRAR
+      win_copy:
+        src: /home/micro11/pacotes/winrar-x64-711br.exe
+        dest: C:\Windows\Temp\winrar-x64-711br.exe
+        
     - name: Transferir o instalador do Foxit Reader
       win_copy:
         src: /home/micro11/pacotes/FoxitPDFReader20244_L1ON_Setup_Prom.exe
@@ -19,6 +24,12 @@
         dest: C:\Windows\Temp\Firefox_setup.exe
 
     # Instalação dos programas
+    - name: Instalar o WinRAR
+      win_package:
+        path: C:\Windows\Temp\winrar-x64-711br.exe
+        arguments: /S
+        state: present
+        
     - name: Instalar o Foxit Reader
       win_package:
         path: C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
@@ -43,6 +54,7 @@
         path: "{{ item }}"
         state: absent
       loop:
+        - C:\Windows\Temp\winrar-x64-711br.exe
         - C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
         - C:\Windows\Temp\Thunderbird Setup 137.0.1.exe
         - C:\Windows\Temp\Firefox Installer.exe
