@@ -1,14 +1,63 @@
 ---
-- name: Instalar a nova versão do Winrar no Windows
+- name: Instalar WinRAR, Foxit Reader, Thunderbird e Firefox no Windows
   hosts: windows
   tasks:
-    - name: Transferir o instalador do Winrar
+    # Transferência dos instaladores
+    - name: Transferir o instalador do Foxit Reader
       win_copy:
-        src: /home/micro11/pacotes/winrar-x64-711br.exe
-        dest: C:\Windows\winrar-x64-711br.exe
+        src: /home/micro11/pacotes/FoxitPDFReader20244_L1ON_Setup_Prom.exe
+        dest: C:\Windows\Temp\FoxitReader_setup.exe
 
-    - name: Instalar o Winrar
+    - name: Transferir o instalador do Thunderbird
+      win_copy:
+        src: /home/micro11/pacotes/Thunderbird Setup 137.0.1.exe
+        dest: C:\Windows\Temp\Thunderbird_setup.exe
+
+    - name: Transferir o instalador do Firefox
+      win_copy:
+        src: /home/micro11/pacotes/Firefox Installer.exe
+        dest: C:\Windows\Temp\Firefox_setup.exe
+
+    # Instalação dos programas
+    - name: Instalar o Foxit Reader
       win_package:
-        path: C:\Windows\winrar-x64-711br.exe
+        path: C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
         arguments: /quiet
         state: present
+
+    - name: Instalar o Thunderbird
+      win_package:
+        path: C:\Windows\Temp\Thunderbird Setup 137.0.1.exe
+        arguments: -ms
+        state: present
+
+    - name: Instalar o Firefox
+      win_package:
+        path: C:\Windows\Temp\Firefox Installer.exe
+        arguments: -ms
+        state: present
+
+    # Limpeza dos instaladores após a instalação
+    - name: Remover arquivos de instalação
+      win_file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
+        - C:\Windows\Temp\Thunderbird Setup 137.0.1.exe
+        - C:\Windows\Temp\Firefox Installer.exe
+
+# ---
+# - name: Instalar a nova versão do Winrar no Windows
+#   hosts: windows
+#   tasks:
+#     - name: Transferir o instalador do Winrar
+#       win_copy:
+#         src: /home/micro11/pacotes/winrar-x64-711br.exe
+#         dest: C:\Windows\winrar-x64-711br.exe
+
+#     - name: Instalar o Winrar
+#       win_package:
+#         path: C:\Windows\winrar-x64-711br.exe
+#         arguments: /quiet
+#         state: present
