@@ -10,18 +10,18 @@
         
     - name: Transferir o instalador do Foxit Reader
       win_copy:
-        src: /home/micro11/pacotes/FoxitPDFReader20244_L1ON_Setup_Prom.exe
-        dest: C:\Windows\Temp\FoxitReader_setup.exe
+        src: /home/micro11/pacotes/FoxitPDFReader.exe
+        dest: C:\Windows\Temp\FoxitPDFReader.exe
 
     - name: Transferir o instalador do Thunderbird
       win_copy:
-        src: /home/micro11/pacotes/Thunderbird Setup 137.0.1.exe
-        dest: C:\Windows\Temp\Thunderbird_setup.exe
+        src: /home/micro11/pacotes/Thunderbird-Setup.exe
+        dest: C:\Windows\Temp\Thunderbird-Setup.exe
 
     - name: Transferir o instalador do Firefox
       win_copy:
-        src: /home/micro11/pacotes/Firefox Installer.exe
-        dest: C:\Windows\Temp\Firefox_setup.exe
+        src: /home/micro11/pacotes/Firefox-Installer.exe
+        dest: C:\Windows\Temp\Firefox-Installer.exe
 
     # Instalação dos programas
     - name: Instalar o WinRAR
@@ -32,19 +32,19 @@
         
     - name: Instalar o Foxit Reader
       win_package:
-        path: C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
+        path: C:\Windows\Temp\FoxitPDFReader.exe
         arguments: /quiet
         state: present
 
     - name: Instalar o Thunderbird
       win_package:
-        path: C:\Windows\Temp\Thunderbird Setup 137.0.1.exe
+        path: C:\Windows\Temp\Thunderbird-Setup.exe
         arguments: -ms
         state: present
 
     - name: Instalar o Firefox
       win_package:
-        path: C:\Windows\Temp\Firefox Installer.exe
+        path: C:\Windows\Temp\Firefox-Installer.exe
         arguments: -ms
         state: present
 
@@ -55,9 +55,9 @@
         state: absent
       loop:
         - C:\Windows\Temp\winrar-x64-711br.exe
-        - C:\Windows\Temp\FoxitPDFReader20244_L1ON_Setup_Prom.exe
-        - C:\Windows\Temp\Thunderbird Setup 137.0.1.exe
-        - C:\Windows\Temp\Firefox Installer.exe
+        - C:\Windows\Temp\FoxitPDFReader.exe
+        - C:\Windows\Temp\Thunderbird-Setup.exe
+        - C:\Windows\Temp\Firefox-Installer.exe
 
 # ---
 # - name: Instalar a nova versão do Winrar no Windows
