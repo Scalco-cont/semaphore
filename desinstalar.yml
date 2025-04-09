@@ -3,7 +3,7 @@
 # Descrição: Este playbook verifica se o McAfee e seus componentes estão instalados nas máquinas Windows
 
 - name: Verificação de Instalação do McAfee
-  hosts: windows_hosts
+  hosts: windows
   gather_facts: yes
   
   tasks:
