@@ -1,14 +1,14 @@
 ---
-- name: Instalar a nova versão do LibreOffice no Windows
+- name: Instalar a nova versão do Winrar no Windows
   hosts: windows
   tasks:
-    - name: Transferir o instalador do certificado
+    - name: Transferir o instalador do Winrar
       win_copy:
-        src: /home/micro11/pacotes/nomachine_8.15.3_1_x64.exe
-        dest: C:\Windows\nomachine_8.15.3_1_x64.exe
+        src: /home/micro11/pacotes/winrar-x64-711br.exe
+        dest: C:\Windows\winrar-x64-711br.exe
 
-    - name: Instalar o LibreOffice
+    - name: Instalar o Winrar
       win_package:
-        path: C:\Windows\nomachine_8.15.3_1_x64.exe
+        path: C:\Windows\winrar-x64-711br.exe
         arguments: /quiet
         state: present
