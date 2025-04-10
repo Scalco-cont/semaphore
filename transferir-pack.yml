@@ -2,16 +2,15 @@
 - name: Instalar WinRAR, Foxit Reader, Thunderbird e Firefox no Windows
   hosts: windows
   tasks:
-    
-    # - name: Transferir o instalador do Foxit Reader
-    #   win_copy:
-    #     src: /home/micro11/pacotes/foxit.exe
-    #     dest: C:\Windows\foxit.exe
-
-    - name: Transferir o instalador do Thunderbird
+    - name: Transferir o instalador do Foxit Reader
       win_copy:
-        src: /home/micro11/pacotes/thunderbird.exe
-        dest: C:\Windows\thunderbird.exe
+        src: /home/micro11/pacotes/foxit.exe
+        dest: C:\Windows\foxit.exe
+
+    # - name: Transferir o instalador do Thunderbird
+    #   win_copy:
+    #     src: /home/micro11/pacotes/thunderbird.exe
+    #     dest: C:\Windows\thunderbird.exe
 
     # - name: Transferir o instalador do Firefox
     #   win_copy:
@@ -25,17 +24,17 @@
     #     arguments: /S
     #     state: present
         
-    # - name: Instalar o Foxit Reader
-    #   win_package:
-    #     path: C:\Windows\foxit.exe
-    #     arguments: /quiet
-    #     state: present
-
-    - name: Instalar o Thunderbird
+    - name: Instalar o Foxit Reader
       win_package:
-        path: C:\Windows\thunderbird.exe
-        arguments: -ms
+        path: C:\Windows\foxit.exe
+        arguments: /quiet
         state: present
+
+    # - name: Instalar o Thunderbird
+    #   win_package:
+    #     path: C:\Windows\thunderbird.exe
+    #     arguments: -ms
+    #     state: present
 
     # - name: Instalar o Firefox
     #   win_package:
