@@ -5,6 +5,7 @@
       win_chocolatey:
         name:
         - foxitreader
+        - firefox
         state: latest
 
 
