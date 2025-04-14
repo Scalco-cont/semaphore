@@ -41,11 +41,11 @@
         arguments: /quiet
         state: present
 
-    - name: Instalar o Thunderbird
-      win_package:
-        path: C:\Windows\thunderbird.exe
-        arguments: /quiet
-        state: present
+    # - name: Instalar o Thunderbird
+    #   win_package:
+    #     path: C:\Windows\thunderbird.exe
+    #     arguments: /quiet
+    #     state: present
 
     - name: Instalar o Firefox
       win_package:
