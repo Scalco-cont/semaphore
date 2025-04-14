@@ -1,4 +1,4 @@
- ---
+---
 - name: Instalar a nova versão do Winrar no Windows
   hosts: windows
   tasks:
