@@ -4,7 +4,7 @@
     - name: Install multiples packages
       win_chocolatey:
         name:
-        - winrar
+        - firefox
         state: latest
 
 
