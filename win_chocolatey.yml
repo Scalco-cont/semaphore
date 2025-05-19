@@ -4,8 +4,7 @@
     - name: Install multiples packages
       win_chocolatey:
         name:
-        - foxitreader
-        - firefox
+        - googlechrome
         state: latest
 
 
