@@ -5,7 +5,8 @@
       win_chocolatey:
         name:
         - googlechrome
-        state: latest
+        state: present
+        install_args: "--ignore-checksums"
 
 
 # - name: Install an Application with chocolatey
